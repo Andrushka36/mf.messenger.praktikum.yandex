@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="stylesheet" href="../theme/common.css">
+    <link rel="stylesheet" href="../theme/forms.css">
+</head>
+<body>
+    <main class="wrapper-center">
+        <form class="login-form js-form-login">
+            <h1 class="login-form__title">Вход</h1>
+            <label class="login-form__row">
+                <input type="text" class="login-form__input" required value="pochta@yandex.ru" name="login">
+                <span class="login-form__label">Почта</span>
+            </label>
+            <label class="login-form__row">
+                <input type="password" class="login-form__input" required value="password" name="password">
+                <span class="login-form__label">Пароль</span>
+            </label>
+            <button class="login-form__submit" type="submit">Авторизоваться</button>
+            <a href="/registration" class="login-form__link">Нет аккаунта?</a>
+        </form>
+    </main>
+    <script src="scripts.js" type="module"></script>
+</body>
+</html>

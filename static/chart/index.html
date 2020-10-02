@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Чат</title>
+    <link rel="stylesheet" href="../theme/common.css">
+    <link rel="stylesheet" href="../theme/charts.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <svg width="0" height="0" class="hidden">
+        <symbol viewBox="0 0 3 16" xmlns="http://www.w3.org/2000/svg" id="actions">
+            <circle cx="1.5" cy="2" r="1.5" fill="currentColor"></circle>
+            <circle cx="1.5" cy="8" r="1.5" fill="currentColor"></circle>
+            <circle cx="1.5" cy="14" r="1.5" fill="currentColor"></circle>
+        </symbol>
+        <symbol viewBox="0 0 22 19" xmlns="http://www.w3.org/2000/svg" id="rename">
+            <path d="M0 19h22v-1.5H0z" fill="currentColor"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.26 0L19 2.74l-2.055 2.055-2.74-2.74L16.26 0zm-2.74 2.74l2.74 2.74L6.74 15H4v-2.74l9.52-9.52z" fill="currentColor"></path>
+        </symbol>
+        <symbol viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" id="delete">
+            <circle cx="11" cy="11" r="10.25" stroke-width="1.5" stroke="currentColor"></circle>
+            <path stroke-width="1.5" d="M7.111 7.111l7.778 7.778m-7.778 0l7.778-7.778" stroke="currentColor"></path>
+        </symbol>
+        <symbol viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" id="photo">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 1.5h14A2.5 2.5 0 0 1 20.5 4v10l-5.98-1.595A11.998 11.998 0 0 0 11.427 12h-.856c-1.043 0-2.083.136-3.091.405L1.5 14V4A2.5 2.5 0 0 1 4 1.5zM0 4a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4V4zm8 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0z" fill="currentColor"></path>
+        </symbol>
+        <symbol viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" id="file">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M4 1.5h14A2.5 2.5 0 0 1 20.5 4v8H16a4 4 0 0 0-4 4v4.5H4A2.5 2.5 0 0 1 1.5 18V4A2.5 2.5 0 0 1 4 1.5zM12 22H4a4 4 0 0 1-4-4V4a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v14a4 4 0 0 1-4 4h-6z" fill="currentColor"></path>
+        </symbol>
+        <symbol viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" id="location">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M20.5 11a9.5 9.5 0 1 1-19 0 9.5 9.5 0 0 1 19 0zm1.5 0c0 6.075-4.925 11-11 11S0 17.075 0 11 4.925 0 11 0s11 4.925 11 11zm-11 3a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" fill="currentColor"></path>
+        </symbol>
+        <symbol viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" id="attach">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.187 13.5l7.576-7.576.943.943-7.577 7.576-.942-.943zM9.7 16.014l7.577-7.576.943.943-7.576 7.576-.943-.943zm5.343 5.343l7.577-7.577.942.943-7.576 7.576-.943-.942zm2.514 2.513l7.576-7.576.943.943-7.576 7.576-.943-.942z" fill="currentColor"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M17.557 23.87c-2.615 2.616-6.845 2.625-9.449.022-2.603-2.604-2.594-6.834.021-9.45l-.942-.942c-3.139 3.138-3.15 8.215-.026 11.339 3.125 3.124 8.201 3.113 11.34-.025l-.944-.943zm5.063-10.09l.942.943c2.441-2.44 2.45-6.389.02-8.819-2.43-2.43-6.379-2.421-8.82.02l.944.943c1.917-1.918 5.02-1.925 6.929-.016 1.91 1.91 1.902 5.012-.016 6.93z" fill="currentColor"></path>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M9.7 16.015c-1.743 1.743-1.749 4.563-.013 6.3 1.735 1.735 4.556 1.729 6.3-.015l-.944-.943a3.118 3.118 0 0 1-4.41.01 3.118 3.118 0 0 1 .01-4.41l-.942-.942z" fill="currentColor"></path>
+        </symbol>
+        <symbol viewBox="0 0 11 5" xmlns="http://www.w3.org/2000/svg" id="read">
+            <line y1="-0.5" x2="3.765" y2="-0.5" transform="matrix(0.705933 0.708278 -0.705933 0.708278 0.700195 2.33301)" stroke="currentColor" />
+            <line y1="-0.5" x2="5.6475" y2="-0.5" transform="matrix(0.705933 -0.708278 0.705933 0.708278 3.3584 5)" stroke="currentColor" />
+            <line y1="-0.5" x2="5.6475" y2="-0.5" transform="matrix(0.705933 -0.708278 0.705933 0.708278 6.01611 5)" stroke="currentColor" />
+        </symbol>
+        <symbol viewBox="0 0 11 5" xmlns="http://www.w3.org/2000/svg" id="sent">
+            <line y1="-0.5" x2="3.765" y2="-0.5" transform="matrix(0.705933 0.708278 -0.705933 0.708278 0.700195 2.33301)" stroke="currentColor" />
+            <line y1="-0.5" x2="5.6475" y2="-0.5" transform="matrix(0.705933 -0.708278 0.705933 0.708278 3.3584 5)" stroke="currentColor" />
+        </symbol>
+        <symbol viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg" id="arrow">
+            <rect y="5.2002" width="11" height="1.6" fill="currentColor" />
+            <path d="M7 1L11 6L7 11" stroke="currentColor" stroke-width="1.6" />
+        </symbol>
+    </svg>
+    <div class="charts-wrapper">
+        <h1 class="visually-hidden">Чат: Вадим</h1>
+        <aside class="charts-wrapper__aside">
+            <div class="link-profile-wrapper">
+                <a href="/profile" class="link-profile">Профиль</a>
+            </div>
+            <div class="charts-search">
+                <input type="search" class="charts-search__input js-input-search" placeholder="Поиск" name="search">
+            </div>
+            <section class="charts-list">
+                <h2 class="visually-hidden">Список чатов</h2>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Андреем" width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">Андрей</a>
+                        </h3>
+                        <div class="chart-item__message">Изображение</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">10:49</div>
+                        </div>
+                        <div class="chart-item__new-message">2</div>
+                    </div>
+                </article>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Киноклуб" width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">Киноклуб</a>
+                        </h3>
+                        <div class="chart-item__message"><span class="chart-item__you-label">Вы:</span> стикер</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">12:00</div>
+                        </div>
+                    </div>
+                </article>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Илья" width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">Илья</a>
+                        </h3>
+                        <div class="chart-item__message">Друзья, у меня для вас особенный выпуск новостей! Тут еще текст, который не влезает</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">15:12</div>
+                        </div>
+                        <div class="chart-item__new-message">4</div>
+                    </div>
+                </article>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item chart-item_active">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Вадимом" width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">Вадим</a>
+                        </h3>
+                        <div class="chart-item__message"><span class="chart-item__you-label">Вы:</span> Круто!</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">Пт</div>
+                        </div>
+                    </div>
+                </article>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы тет-а-теты" width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">тет-а-теты</a>
+                        </h3>
+                        <div class="chart-item__message">И Human Interface Guidelines и Material Design рекомендуют и еще текст, который не влезает</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">Ср</div>
+                        </div>
+                    </div>
+                </article>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы 1, 2, 3" width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">1, 2, 3</a>
+                        </h3>
+                        <div class="chart-item__message">Миллионы россиян ежедневно проводят десятки часов свое и тут тоже есть текст, который не влезает</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">Пн</div>
+                        </div>
+                    </div>
+                </article>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Design Destroyer" width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">Design Destroyer</a>
+                        </h3>
+                        <div class="chart-item__message">В 2008 году художник Jon Rafman начал собирать - да-да, и этот текст тоже не влезает</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">Пн</div>
+                        </div>
+                    </div>
+                </article>
+                <article class="chart-item-wrapper">
+                    <div class="chart-item">
+                        <img class="chart-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Day." width="47" height="47">
+                        <h3 class="chart-item__title">
+                            <a href="/chart" class="chart-item__link">Day.</a>
+                        </h3>
+                        <div class="chart-item__message">Так увлёкся работой по курсу, что совсем забыл его анонсировать - фух, это последний текст, который не влезает</div>
+                        <div class="chart-item__time-wrapper">
+                            <div class="chart-item__time">31 Мая 2020</div>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </aside>
+        <main class="chart">
+            <header class="chart-header">
+                <div class="chart-row">
+                    <img class="chart-header__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Вадимом" width="34" height="34">
+                    <div class="chart-header__information">
+                        <div class="chart-header__title">Вадим</div>
+                        <div class="chart-header__status">Был 5 минут назад</div>
+                    </div>
+                    <button class="chart-header__actions js-button-actions" type="button" title="Действия с чатом">
+                        <svg>
+                            <use xlink:href="#actions"></use>
+                        </svg>
+                    </button>
+                    <div class="chart-modal chart-modal_down chart-model_right js-modal-actions">
+                        <div class="chart-actions">
+                            <button class="chart-actions__item js-button-rename" type="button">
+                                <svg class="chart-actions__item-icon">
+                                    <use xlink:href="#rename"></use>
+                                </svg>
+                                <span class="chart-actions__item-label">Переименовать</span>
+                            </button>
+                            <button class="chart-actions__item js-button-delete" type="button">
+                                <svg class="chart-actions__item-icon">
+                                    <use xlink:href="#delete"></use>
+                                </svg>
+                                <span class="chart-actions__item-label">Удалить</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <form class="chart-header-form js-form-rename">
+                    <input type="text" class="chart-header-form__input" value="Вадим" name="chart_name">
+                    <button type="submit" class="chart-header-form__button">Сохранить</button>
+                </form>
+            </header>
+            <div class="chart__content">
+                <h2 class="visually-hidden">Список сообщений</h2>
+                <div class="chart__messages">
+                    <div class="messages-date">19 июня</div>
+                    <div class="message message_incoming">
+                        <div class="message__content">Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.</div>
+                        <div class="message__content">Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.<span class="message__time-holder"></span></div>
+                        <time class="message__time">11:56</time>
+                    </div>
+                    <div class="message message_attach">
+                        <picture>
+                            <source srcset="../assets/photo.webp">
+                            <img src="../assets/photo.jpg" alt="photo.jpg">
+                        </picture>
+                        <time class="message__time">11:56</time>
+                    </div>
+                    <div class="message message_outgoing">
+                        <div class="message__content">Круто!<span class="message__time-holder"></span></div>
+                        <time class="message__time">
+                            <svg class="message__icon">
+                                <use xlink:href="#read"></use>
+                            </svg>
+                            12:00
+                        </time>
+                    </div>
+                </div>
+            </div>
+            <form class="message-form js-form-message">
+                <div class="chart-row">
+                    <button class="message-form__attach js-button-actions" type="button" title="Добавить вложение">
+                        <svg>
+                            <use xlink:href="#attach"></use>
+                        </svg>
+                    </button>
+                    <div class="chart-modal chart-modal_top chart-modal_left js-modal-actions">
+                        <div class="chart-actions">
+                            <button class="chart-actions__item" type="button">
+                                <svg class="chart-actions__item-icon">
+                                    <use xlink:href="#photo"></use>
+                                </svg>
+                                <span class="chart-actions__item-label">Фото или Видео</span>
+                            </button>
+                            <button class="chart-actions__item" type="button">
+                                <svg class="chart-actions__item-icon">
+                                    <use xlink:href="#file"></use>
+                                </svg>
+                                <span class="chart-actions__item-label">Файл</span>
+                            </button>
+                            <button class="chart-actions__item" type="button">
+                                <svg class="chart-actions__item-icon">
+                                    <use xlink:href="#location"></use>
+                                </svg>
+                                <span class="chart-actions__item-label">Локация</span>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="text" class="message-form__input" placeholder="Сообщение" name="message" autocomplete="off">
+                    <button type="submit" class="message-form__submit" title="Отправить сообщение">
+                        <svg>
+                            <use xlink:href="#arrow"></use>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </main>
+        <div class="modal-delete js-modal-delete">
+            <div class="modal-delete__content">
+                <div class="modal-delete__title">Вы хотите удалить чат</div>
+                <button class="modal-delete__button modal-delete__button_confirm" type="button">Удалить</button>
+                <button class="modal-delete__button modal-delete__button-cancel" type="button">Отменить</button>
+            </div>
+        </div>
+    </div>
+    <script src="/js/search.js"></script>
+    <script src="scripts.js" type="module"></script>
+</body>
+</html>

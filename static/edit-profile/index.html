@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование профиля</title>
+    <link rel="stylesheet" href="../theme/common.css">
+    <link rel="stylesheet" href="../theme/profile.css">
+</head>
+<body>
+    <div class="profile-page">
+        <div class="profile__back-link-wrapper">
+            <a href="/charts" class="profile-back-link"  title="Вернуться к выбору чата">
+                <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="13" y="6.80005" width="11" height="1.6" transform="rotate(-180 13 6.80005)" fill="white"/>
+                    <path d="M6 11L2 6L6 1" stroke="white" stroke-width="1.6"/>
+                </svg>
+            </a>
+        </div>
+        <main class="profile profile_long">
+            <h1 class="visually-hidden">Редактирование профиля</h1>
+            <img src="../assets/avatar.jpg" alt="Аватар пользователя Васян" width="131" height="131">
+            <div class="profile__title">Васян</div>
+            <form class="profile-section js-form-profile">
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Имя</div>
+                    <input type="text" class="profile-row__value" value="Вася" name="first_name">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Фамилия</div>
+                    <input type="text" class="profile-row__value" value="Васин" name="second_name">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Отображаемое имя</div>
+                    <input type="text" class="profile-row__value" value="Васян" name="display_name">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Логин</div>
+                    <input type="text" class="profile-row__value" value="username" name="login">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Почта</div>
+                    <input type="email" class="profile-row__value" value="pochta@yandex.ru" name="email">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Телефон</div>
+                    <input type="tel" class="profile-row__value" value="+7 903 123 4567" name="phone">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Текущий пароль</div>
+                    <input type="password" class="profile-row__value" value="password" name="oldPassword">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Новый пароль</div>
+                    <input type="password" class="profile-row__value" value="password" name="newPassword">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Новый пароль (еще раз)</div>
+                    <input type="password" class="profile-row__value" value="password">
+                </div>
+                <div class="profile__row profile-row">
+                    <div class="profile-row__title">Загрузить аватар</div>
+                    <input type="file" class="profile-row__value" name="avatar">
+                </div>
+                <button type="submit" class="profile__submit">Сохранить</button>
+            </form>
+        </main>
+    </div>
+    <script src="scripts.js" type="module"></script>
+</body>
+</html>

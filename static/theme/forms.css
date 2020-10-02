@@ -1,0 +1,77 @@
+.login-form {
+  width: 340px;
+  height: 460px;
+  font-size: 13px;
+  padding: 70px 30px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form_long {
+  height: 680px;
+}
+
+.login-form__title {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-form__row {
+  display: block;
+  position: relative;
+  padding-top: 15px;
+  padding-bottom: 5px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #3369F3;
+}
+
+.login-form__input_error {
+  color: #FF2F2F;
+}
+
+.login-form__label {
+  position: absolute;
+  top: 17px;
+  left: 0;
+  pointer-events: none;
+  color: #999999;
+  transition: 0.3s;
+}
+.login-form__input:focus ~ .login-form__label, .login-form__input:not(:invalid) ~ .login-form__label {
+  font-size: 9px;
+  top: 0;
+}
+
+.login-form__error {
+  position: absolute;
+  left: 0;
+  bottom: -14px;
+  color: #FF2F2F;
+  font-size: 8px;
+}
+
+.login-form__submit {
+  color: #FFFFFF;
+  text-align: center;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: #3369F3;
+  border-radius: 8px;
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 14px;
+  font-size: inherit;
+  transition: 0.3s;
+}
+.login-form__submit:hover {
+  background-color: #124DE2;
+}
+
+.login-form__link {
+  align-self: center;
+}
+
+/*# sourceMappingURL=forms.css.map */

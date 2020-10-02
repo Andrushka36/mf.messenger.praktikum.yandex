@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="../theme/common.css">
+    <link rel="stylesheet" href="../theme/forms.css">
+</head>
+<body>
+    <main class="wrapper-center">
+        <form class="login-form login-form_long js-form-registration">
+            <h1 class="login-form__title">Регистрация</h1>
+            <label class="login-form__row">
+                <input type="text" class="login-form__input" required value="Вася" name="first_name">
+                <span class="login-form__label">Имя</span>
+            </label>
+            <label class="login-form__row">
+                <input type="text" class="login-form__input" required value="Васин" name="second_name">
+                <span class="login-form__label">Фамилия</span>
+            </label>
+            <label class="login-form__row">
+                <input type="text" class="login-form__input" required value="username" name="login">
+                <span class="login-form__label">Логин</span>
+            </label>
+            <label class="login-form__row">
+                <input type="email" class="login-form__input" required value="pochta@yandex.ru" name="email">
+                <span class="login-form__label">Почта</span>
+            </label>
+            <label class="login-form__row">
+                <input type="text" class="login-form__input" required value="+7 903 123 4567" name="phone">
+                <span class="login-form__label">Телефон</span>
+            </label>
+            <label class="login-form__row">
+                <input type="password" class="login-form__input login-form__input_error" required value="password" name="password">
+                <span class="login-form__label">Пароль</span>
+            </label>
+            <label class="login-form__row">
+                <input type="password" class="login-form__input login-form__input_error" required value="password">
+                <span class="login-form__label">Пароль (еще раз)</span>
+                <span class="login-form__error">Пароли не совпадают</span>
+            </label>
+            <button class="login-form__submit" type="submit">Зарегистрироваться</button>
+            <a href="/login" class="login-form__link">Войти</a>
+        </form>
+    </main>
+    <script src="scripts.js" type="module"></script>
+</body>
+</html>
