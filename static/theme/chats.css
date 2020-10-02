@@ -1,10 +1,10 @@
-.charts-wrapper {
+.chats-wrapper {
   display: flex;
   height: 100vh;
   color: #999999;
 }
 
-.charts-wrapper__aside {
+.chats-wrapper__aside {
   display: flex;
   flex-direction: column;
   flex: 0 0 310px;
@@ -36,12 +36,12 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
-.charts-search {
+.chats-search {
   padding-top: 23px;
   padding-bottom: 14px;
 }
 
-.charts-search__input {
+.chats-search__input {
   padding: 10px 10px 10px 34px;
   border-radius: 5px;
   background-color: #EFEFEF;
@@ -50,25 +50,25 @@
   background-size: 20px;
   background-repeat: no-repeat;
 }
-.charts-search__input:not(:focus):placeholder-shown {
+.chats-search__input:not(:focus):placeholder-shown {
   background-position: 92px 50%;
   padding-left: 10px;
   text-align: center;
 }
 
-.charts-list {
+.chats-list {
   margin-left: -10px;
   margin-right: -10px;
   overflow-y: auto;
 }
 
-.chart-item-wrapper {
+.chat-item-wrapper {
   border-top: 1px solid #EAEAEA;
   padding-top: 2px;
   padding-bottom: 2px;
 }
 
-.chart-item {
+.chat-item {
   display: grid;
   display: -ms-grid;
   grid-template-columns: 47px 147px 70px 25px;
@@ -78,35 +78,35 @@
   position: relative;
   transition: 0.3s;
 }
-.chart-item:hover {
+.chat-item:hover {
   background-color: #E4EDFD;
 }
 
-.chart-item_active {
+.chat-item_active {
   background-color: #E4EDFD;
 }
 
-.chart-item__avatar {
+.chat-item__avatar {
   border-radius: 50%;
   grid-row: span 2;
 }
 
-.chart-item__title,
-.chart-item__message {
+.chat-item__title,
+.chat-item__message {
   margin-left: 10px;
   margin-right: 15px;
 }
 
-.chart-item__title {
+.chat-item__title {
   margin-top: 0;
   margin-bottom: 4px;
 }
 
-.chart-item__link {
+.chat-item__link {
   color: #1E1E1E;
   outline-offset: 3px;
 }
-.chart-item__link::before {
+.chat-item__link::before {
   content: "";
   position: absolute;
   top: 0;
@@ -114,11 +114,11 @@
   left: 0;
   right: 0;
 }
-.chart-item__link:hover {
+.chat-item__link:hover {
   text-decoration: none;
 }
 
-.chart-item__message {
+.chat-item__message {
   line-height: 15px;
   max-height: 30px;
   overflow: hidden;
@@ -129,22 +129,22 @@
   grid-column: span 2;
 }
 
-.chart-item__you-label {
+.chat-item__you-label {
   color: #1E1E1E;
 }
 
-.chart-item__time-wrapper {
+.chat-item__time-wrapper {
   font-size: 9px;
   grid-column: span 2;
   display: flex;
   justify-content: flex-end;
 }
 
-.chart-item__time {
+.chat-item__time {
   min-width: 25px;
 }
 
-.chart-item__new-message {
+.chat-item__new-message {
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -157,4 +157,4 @@
   margin: auto;
 }
 
-/*# sourceMappingURL=charts.css.map */
+/*# sourceMappingURL=chats.css.map */
