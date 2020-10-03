@@ -74,7 +74,9 @@
 
 .profile-row__value
   color: $text-secondary-color
-  text-align: right
+
+  &:not(input)
+    text-align: right
 
 .profile-row__logout
   color: $red-1

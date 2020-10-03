@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Чат</title>
     <link rel="stylesheet" href="../theme/common.css">
-    <link rel="stylesheet" href="../theme/chats.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../theme/chat.css">
 </head>
 <body>
     <svg width="0" height="0" class="hidden">
@@ -62,104 +61,106 @@
             </div>
             <section class="chats-list">
                 <h2 class="visually-hidden">Список чатов</h2>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Андреем" width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">Андрей</a>
-                        </h3>
-                        <div class="chat-item__message">Изображение</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">10:49</div>
+                <ul class="chats-list__content">
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Андреем" width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">Андрей</a>
+                            </h3>
+                            <div class="chat-item__message">Изображение</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">10:49</div>
+                            </div>
+                            <div class="chat-item__new-message">2</div>
                         </div>
-                        <div class="chat-item__new-message">2</div>
-                    </div>
-                </article>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Киноклуб" width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">Киноклуб</a>
-                        </h3>
-                        <div class="chat-item__message"><span class="chat-item__you-label">Вы:</span> стикер</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">12:00</div>
+                    </li>
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Киноклуб" width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">Киноклуб</a>
+                            </h3>
+                            <div class="chat-item__message"><span class="chat-item__you-label">Вы:</span> стикер</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">12:00</div>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Илья" width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">Илья</a>
-                        </h3>
-                        <div class="chat-item__message">Друзья, у меня для вас особенный выпуск новостей! Тут еще текст, который не влезает</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">15:12</div>
+                    </li>
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Илья" width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">Илья</a>
+                            </h3>
+                            <div class="chat-item__message">Друзья, у меня для вас особенный выпуск новостей! Тут еще текст, который не влезает</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">15:12</div>
+                            </div>
+                            <div class="chat-item__new-message">4</div>
                         </div>
-                        <div class="chat-item__new-message">4</div>
-                    </div>
-                </article>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item chat-item_active">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Вадимом" width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">Вадим</a>
-                        </h3>
-                        <div class="chat-item__message"><span class="chat-item__you-label">Вы:</span> Круто!</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">Пт</div>
+                    </li>
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item chat-item_active">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы с Вадимом" width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">Вадим</a>
+                            </h3>
+                            <div class="chat-item__message"><span class="chat-item__you-label">Вы:</span> Круто!</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">Пт</div>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы тет-а-теты" width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">тет-а-теты</a>
-                        </h3>
-                        <div class="chat-item__message">И Human Interface Guidelines и Material Design рекомендуют и еще текст, который не влезает</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">Ср</div>
+                    </li>
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы тет-а-теты" width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">тет-а-теты</a>
+                            </h3>
+                            <div class="chat-item__message">И Human Interface Guidelines и Material Design рекомендуют и еще текст, который не влезает</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">Ср</div>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы 1, 2, 3" width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">1, 2, 3</a>
-                        </h3>
-                        <div class="chat-item__message">Миллионы россиян ежедневно проводят десятки часов свое и тут тоже есть текст, который не влезает</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">Пн</div>
+                    </li>
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы 1, 2, 3" width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">1, 2, 3</a>
+                            </h3>
+                            <div class="chat-item__message">Миллионы россиян ежедневно проводят десятки часов свое и тут тоже есть текст, который не влезает</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">Пн</div>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Design Destroyer" width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">Design Destroyer</a>
-                        </h3>
-                        <div class="chat-item__message">В 2008 году художник Jon Rafman начал собирать - да-да, и этот текст тоже не влезает</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">Пн</div>
+                    </li>
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Design Destroyer" width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">Design Destroyer</a>
+                            </h3>
+                            <div class="chat-item__message">В 2008 году художник Jon Rafman начал собирать - да-да, и этот текст тоже не влезает</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">Пн</div>
+                            </div>
                         </div>
-                    </div>
-                </article>
-                <article class="chat-item-wrapper">
-                    <div class="chat-item">
-                        <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Day." width="47" height="47">
-                        <h3 class="chat-item__title">
-                            <a href="/chat" class="chat-item__link">Day.</a>
-                        </h3>
-                        <div class="chat-item__message">Так увлёкся работой по курсу, что совсем забыл его анонсировать - фух, это последний текст, который не влезает</div>
-                        <div class="chat-item__time-wrapper">
-                            <div class="chat-item__time">31 Мая 2020</div>
+                    </li>
+                    <li class="chat-item-wrapper">
+                        <div class="chat-item">
+                            <img class="chat-item__avatar" src="../assets/avatar.jpg" alt="Аватар беседы Day." width="47" height="47">
+                            <h3 class="chat-item__title">
+                                <a href="/chat" class="chat-item__link">Day.</a>
+                            </h3>
+                            <div class="chat-item__message">Так увлёкся работой по курсу, что совсем забыл его анонсировать - фух, это последний текст, который не влезает</div>
+                            <div class="chat-item__time-wrapper">
+                                <div class="chat-item__time">31 Мая 2020</div>
+                            </div>
                         </div>
-                    </div>
-                </article>
+                    </li>
+                </ul>
             </section>
         </aside>
         <main class="chat">
@@ -199,21 +200,21 @@
             </header>
             <div class="chat__content">
                 <h2 class="visually-hidden">Список сообщений</h2>
-                <div class="chat__messages">
-                    <div class="messages-date">19 июня</div>
-                    <div class="message message_incoming">
+                <ul class="chat__messages">
+                    <li class="messages-date">19 июня</li>
+                    <li class="message message_incoming">
                         <div class="message__content">Привет! Смотри, тут всплыл интересный кусок лунной космической истории — НАСА в какой-то момент попросила Хассельблад адаптировать модель SWC для полетов на Луну. Сейчас мы все знаем что астронавты летали с моделью 500 EL — и к слову говоря, все тушки этих камер все еще находятся на поверхности Луны, так как астронавты с собой забрали только кассеты с пленкой.</div>
                         <div class="message__content">Хассельблад в итоге адаптировал SWC для космоса, но что-то пошло не так и на ракету они так никогда и не попали. Всего их было произведено 25 штук, одну из них недавно продали на аукционе за 45000 евро.<span class="message__time-holder"></span></div>
                         <time class="message__time">11:56</time>
-                    </div>
-                    <div class="message message_attach">
+                    </li>
+                    <li class="message message_attach">
                         <picture>
                             <source srcset="../assets/photo.webp">
                             <img src="../assets/photo.jpg" alt="photo.jpg">
                         </picture>
                         <time class="message__time">11:56</time>
-                    </div>
-                    <div class="message message_outgoing">
+                    </li>
+                    <li class="message message_outgoing">
                         <div class="message__content">Круто!<span class="message__time-holder"></span></div>
                         <time class="message__time">
                             <svg class="message__icon">
@@ -221,8 +222,8 @@
                             </svg>
                             12:00
                         </time>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
             <form class="message-form js-form-message">
                 <div class="chat-row">
@@ -270,7 +271,7 @@
             </div>
         </div>
     </div>
-    <script src="/js/search.js"></script>
-    <script src="scripts.js" type="module"></script>
+    <script src="/js/utils/send-search-value.js"></script>
+    <script src="/js/chat.js" type="module"></script>
 </body>
 </html>

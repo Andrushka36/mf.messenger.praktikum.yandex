@@ -81,6 +81,8 @@
 
 .profile-row__value {
   color: #999999;
+}
+.profile-row__value:not(input) {
   text-align: right;
 }
 

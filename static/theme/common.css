@@ -58,6 +58,15 @@ svg {
   box-sizing: border-box;
 }
 
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
 .wrapper-center {
   width: 100%;
   display: flex;
