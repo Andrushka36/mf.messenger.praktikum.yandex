@@ -5,11 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node src/server.js"
+    "server": "node server.js",
+    "clean": "rm -rf ./static/js",
+    "check": "tsc --watch"
   },
   "author": "Andrey Artamonov",
   "license": "ISC",
   "dependencies": {
     "express": "4.17.1"
+  },
+  "devDependencies": {
+    "typescript": "4.0.3"
   }
 }

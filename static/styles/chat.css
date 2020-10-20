@@ -104,7 +104,6 @@
 
 .chat-item__link {
   color: #1E1E1E;
-  outline-offset: 3px;
 }
 .chat-item__link::before {
   content: "";
@@ -240,7 +239,6 @@
 }
 
 .chat-modal {
-  display: none;
   position: absolute;
   background-color: #FFFFFF;
   box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.14);
@@ -250,11 +248,11 @@
   z-index: 100;
 }
 
-.chat-modal_down {
+.chat-modal_bottom {
   top: calc(100% + 22.5px);
 }
 
-.chat-model_right {
+.chat-modal_right {
   right: -10px;
 }
 
@@ -279,8 +277,7 @@
 .chat-actions__item:not(:last-child) {
   margin-bottom: 8px;
 }
-
-.chat-actions__item-icon {
+.chat-actions__item svg {
   width: 22px;
   height: 22px;
   color: #3369F3;
@@ -336,6 +333,12 @@
   right: 11px;
   font-size: 9px;
   color: #999999;
+  display: grid;
+  grid-template-columns: min-content min-content;
+  align-items: baseline;
+}
+.message__time time:not(:first-child) {
+  margin-left: 3px;
 }
 
 .message_incoming {
@@ -346,6 +349,7 @@
 .message_attach {
   background-color: transparent;
   border: 1px solid #EAEAEA;
+  padding-bottom: 33px;
 }
 .message_attach .message__time {
   background-color: #A9A9A9;
@@ -363,7 +367,7 @@
 .message_outgoing .message__time-holder {
   width: 45px;
 }
-.message_outgoing .message__time {
+.message_outgoing:not(.message_attach) .message__time {
   color: #3369F3;
 }
 

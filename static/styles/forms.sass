@@ -26,8 +26,8 @@
   margin-bottom: 16px
   border-bottom: 1px solid $blue-1
 
-.login-form__input_error
-  color: $red-1
+  .form-error
+    bottom: - $extra2-small-font-size - 6px
 
 .login-form__label
   position: absolute
@@ -41,13 +41,6 @@
   .login-form__input:not(:invalid) ~ &
     font-size: $extra-small-font-size
     top: 0
-
-.login-form__error
-  position: absolute
-  left: 0
-  bottom: - $extra2-small-font-size - 6px
-  color: $red-1
-  font-size: $extra2-small-font-size
 
 .login-form__submit
   color: $white-1

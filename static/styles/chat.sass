@@ -74,7 +74,6 @@
     background-color: $gray-6
 
 .chat-modal
-  display: none
   position: absolute
   background-color: $white-1
   box-shadow: $box-shadow
@@ -83,10 +82,10 @@
   padding-bottom: 8px
   z-index: 100
 
-.chat-modal_down
+.chat-modal_bottom
   top: calc(100% + 22.5px)
 
-.chat-model_right
+.chat-modal_right
   right: -10px
 
 .chat-modal_top
@@ -108,10 +107,10 @@
   &:not(:last-child)
     margin-bottom: 8px
 
-.chat-actions__item-icon
-  width: 22px
-  height: 22px
-  color: $blue-1
+  svg
+    width: 22px
+    height: 22px
+    color: $blue-1
 
 .chat-actions__item-label
   margin-left: 15px
@@ -157,6 +156,12 @@
   right: 11px
   font-size: $extra-small-font-size
   color: $text-secondary-color
+  display: grid
+  grid-template-columns: min-content min-content
+  align-items: baseline
+
+  time:not(:first-child)
+    margin-left: 3px
 
 .message_incoming
   background-color: $gray-7
@@ -165,6 +170,7 @@
 .message_attach
   background-color: transparent
   border: 1px solid $gray-3
+  padding-bottom: 33px
 
   .message__time
     background-color: $gray-2
@@ -181,7 +187,7 @@
   .message__time-holder
     width: 45px
 
-  .message__time
+  &:not(.message_attach) .message__time
     color: $blue-1
 
 .message__icon

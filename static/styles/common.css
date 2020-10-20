@@ -41,17 +41,12 @@ button {
 }
 
 a, input, button {
-  outline-offset: 5px;
+  outline-offset: 3px;
 }
 
 img {
   display: block;
   max-width: 100%;
-}
-
-svg {
-  width: 100%;
-  height: 100%;
 }
 
 * {
@@ -96,6 +91,17 @@ li {
   border: 0;
   clip: rect(0 0 0 0);
   clip-path: inset(100%);
+}
+
+.form-input-error {
+  color: #FF2F2F;
+}
+
+.form-error {
+  position: absolute;
+  left: 0;
+  color: #FF2F2F;
+  font-size: 8px;
 }
 
 /*# sourceMappingURL=common.css.map */

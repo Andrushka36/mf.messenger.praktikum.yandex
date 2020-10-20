@@ -51,7 +51,7 @@
 }
 
 .profile_long {
-  max-height: 850px;
+  max-height: 900px;
 }
 
 .profile__title {
@@ -67,8 +67,8 @@
 }
 
 .profile__row {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 13px;
+  padding-bottom: 13px;
 }
 .profile__row:not(:last-child) {
   border-bottom: 1px solid #EAEAEA;
@@ -77,12 +77,17 @@
 .profile-row {
   display: grid;
   grid-template-columns: 200px 1fr;
+  position: relative;
+}
+.profile-row .form-error {
+  left: 200px;
+  bottom: 2px;
 }
 
-.profile-row__value {
+.profile-row__value:not(.form-input-error) {
   color: #999999;
 }
-.profile-row__value:not(input) {
+.profile-row__value:not(.form-input-error):not(input) {
   text-align: right;
 }
 

@@ -104,7 +104,6 @@
 
 .chat-item__link {
   color: #1E1E1E;
-  outline-offset: 3px;
 }
 .chat-item__link::before {
   content: "";
