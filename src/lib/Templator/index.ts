@@ -1,24 +1,10 @@
-// имея некоторый опыт работы с современными фронтендерскими технологиями,
-// конечно, тяжело писать свой некий аналог их,
-// ибо ты примерно знаешь, как что должно работать,
-// и пытаешься сделать так же,
-// но по понятными причинам, к сожалению, это невозможно
-
-// для возможности осуществлять вложенность компонентов
-// добавил специальное свойство-класс,
-// инстансы которого можно выводить в шаблоне
-
-import { Component } from './Component';
-
-type AllowedComponent = { getContent: () => SVGElement | DocumentFragment | HTMLElement | Text | null };
-
-type AllowedComponentConstructor = AllowedComponent & FunctionConstructor;
-
-type TemplatorTreeType =
-    | { children: TemplatorTreeType[], tag: string, fullTag: string }
-    | string;
-
-type TemplatorContextType = { [key: string]: string | number | boolean | Function | AllowedComponent | AllowedComponent[] | undefined };
+import { Component } from '../Component';
+import {
+    AllowedComponent,
+    AllowedComponentConstructor,
+    TemplatorTreeType,
+    TemplatorContextType
+} from './types';
 
 class Templator {
     protected _allowed: AllowedComponentConstructor | null = null;
@@ -31,12 +17,43 @@ class Templator {
 
     public SVG_TAGS = ['svg', 'circle', 'path', 'stroke', 'rect', 'line'];
 
+    private _setAttributes<T>(node: HTMLElement | SVGElement, attrs: RegExpMatchArray, ctx: TemplatorContextType) {
+        const regexp = /(?<prop>[a-zA-Z0-9-]+)(="(?<value>.*?)")?/;
+        attrs.forEach(attr => {
+            const { prop, value = '' } = attr.match(regexp)?.groups as { prop: string, value?: string };
+
+            let val: string | number | boolean | Function | undefined | T = value;
+            const match = value?.match(/{{ (\w+) }}/);
+            if (match !== null && match !== undefined && match[1] !== undefined) {
+                if (typeof ctx[match[1]] === 'function') {
+                    val = ctx[match[1]] as string | number | boolean | Function | undefined | T;
+                } else {
+                    const re = new RegExp(`{{ ${match[1]} }}`)
+                    val = val?.replace(re, ctx[match[1]] as string || '');
+                }
+            }
+
+            if (typeof val === 'function' && prop in this.EVENTS) {
+                node.addEventListener(
+                    this.EVENTS[prop],
+                    val as (this: Document, ev: DocumentEventMap['blur' | 'change' | 'click' | 'submit']) => any
+                );
+            } else if (prop === 'class' && val !== undefined && node instanceof HTMLElement) {
+                node.className = String(val);
+            } else if (value === undefined) {
+                node.setAttribute(prop, "true");
+            } else {
+                node.setAttribute(prop, String(val));
+            }
+        });
+    }
+
     private _createNode<T extends AllowedComponent>(element: TemplatorTreeType, ctx: TemplatorContextType): SVGElement | DocumentFragment | HTMLElement | Text {
         if (typeof element === 'string') {
             let newItem = element;
             const vars = (element
                 .match(/{{ (\w+) }}/g) || [])
-                .reduce<string[]>((prev, current) => prev.includes(current) ? prev : [...prev, current.replace(/({)|(})|( )/g, '')] ,[]);
+                .reduce<string[]>((prev, current) => prev.includes(current) ? prev : [...prev, current.replace(/({)|(})|( )/g, '')], []);
 
             const fragment = document.createDocumentFragment();
 
@@ -87,34 +104,7 @@ class Templator {
         const attrs = fullTag.match(/([a-zA-Z0-9-]+)="(.*?)"/g);
 
         if (attrs !== null) {
-            const regexp = /(?<prop>[a-zA-Z0-9-]+)(="(?<value>.*?)")?/;
-            attrs.forEach(attr => {
-                const { prop, value = '' } = attr.match(regexp)?.groups as { prop: string, value?: string };
-
-                let val: string | number | boolean | Function | undefined | T = value;
-                const match = value?.match(/{{ (\w+) }}/);
-                if (match !== null && match !== undefined && match[1] !== undefined) {
-                    if (typeof ctx[match[1]] === 'function') {
-                        val = ctx[match[1]] as string | number | boolean | Function | undefined | T;
-                    } else {
-                        const re = new RegExp(`{{ ${match[1]} }}`)
-                        val = val?.replace(re, ctx[match[1]] as string || '');
-                    }
-                }
-
-                if (typeof val === 'function' && prop in this.EVENTS) {
-                    wrapper.addEventListener(
-                        this.EVENTS[prop],
-                        val as (this: Document, ev: DocumentEventMap['blur' | 'change' | 'click' | 'submit']) => any
-                    );
-                } else if (prop === 'class' && val !== undefined && wrapper instanceof HTMLElement) {
-                    wrapper.className = String(val);
-                } else if (value === undefined) {
-                    wrapper.setAttribute(prop, "true");
-                } else {
-                    wrapper.setAttribute(prop, String(val));
-                }
-            });
+            this._setAttributes<T>(wrapper, attrs, ctx);
         }
 
         children.forEach((child) => {

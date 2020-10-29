@@ -1,17 +1,9 @@
 import { Component } from '../../lib/Component';
 import { templator } from '../../lib/Templator';
 import { template } from './template';
-
-interface IMessageContent {
-    text: string;
-    last?: boolean;
-}
+import { IMessageContent } from './interfaces';
 
 export class MessageContent extends Component<IMessageContent> {
-    constructor(props: IMessageContent) {
-        super(props);
-    }
-
     render() {
         const { text, last } = this.props;
         return templator.compile(template, {

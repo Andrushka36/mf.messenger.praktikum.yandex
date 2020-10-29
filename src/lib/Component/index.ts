@@ -1,7 +1,7 @@
-import { EventBus } from './EventBus';
+import { EventBus } from '../EventBus';
 
 export class Component<T extends {} = any> {
-    constructor(props: T) {
+    constructor(props: T = {} as T) {
         const eventBus = new EventBus();
 
         this.props = this._makePropsProxy(props);
@@ -24,7 +24,7 @@ export class Component<T extends {} = any> {
 
     private _mounted: boolean = false;
 
-    public props: T;
+    public readonly props: T;
 
     private eventBus: () => EventBus;
 

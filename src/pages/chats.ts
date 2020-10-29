@@ -1,12 +1,13 @@
 import { Chats } from '../components/Chats';
-import { ChatItem, IChatItem } from '../components/ChatItem';
+import { ChatItem } from '../components/ChatItem';
 import { SelectChat } from '../components/SelectChat';
 import { NewMessage  } from '../components/NewMessage';
 import { CharItemOutgoingMessage } from '../components/ChatItemOutgoingMessage';
 import { render } from '../utils/render';
 import { chatItemsData } from '../data/chatItemsData';
+import { IChatItem } from '../components/ChatItem/interfaces';
 
-const selectChat = new SelectChat({});
+const selectChat = new SelectChat();
 
 const chatItems: ChatItem[] = chatItemsData.map(({ newMessage, incomingMessage, outgoingMessage, ...mainProps }) => {
     const props: Partial<IChatItem> = { ...mainProps };
@@ -26,8 +27,7 @@ const chatItems: ChatItem[] = chatItemsData.map(({ newMessage, incomingMessage, 
 const chats = new Chats({
     chatItems,
     content: selectChat,
-    onChange: (event: Event) => {
-        const { target } = event;
+    onChange: ({ target }: Event) => {
         const { value } = target as HTMLInputElement;
 
         console.log(`search: ${value}`);

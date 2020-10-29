@@ -1,23 +1,10 @@
 import { Component } from '../../lib/Component';
 import { templator } from '../../lib/Templator';
 import { template } from './template';
-import { Form, ValidationFunctionType } from '../../lib/Form';
-
-interface ILoginForm<T> {
-    buttonLabel: string;
-    content: Component[];
-    excludeOnSubmit?: keyof T | (keyof T)[];
-    linkHref: string;
-    linkLabel: string;
-    long?: true;
-    onSubmit: (values: T) => void;
-    pageTitle: string;
-    validator?: Partial<{ [key in keyof T]: ValidationFunctionType<T> }>;
-}
+import { Form } from '../../lib/Form';
+import { ILoginForm } from './interfaces';
 
 export class LoginForm<T> extends Component<ILoginForm<T>> {
-    public form!: Form<T>;
-
     constructor(props: ILoginForm<T>) {
         super(props);
 
@@ -39,16 +26,22 @@ export class LoginForm<T> extends Component<ILoginForm<T>> {
 
     render() {
         const {
-            excludeOnSubmit,
+            buttonLabel,
+            content,
+            linkHref,
+            linkLabel,
             long,
-            onSubmit,
-            validator,
-            ...others
+            pageTitle,
         } = this.props;
 
         return templator.compile(template, {
-            ...others,
+            buttonLabel,
             className: long ? 'login-form_long' : '',
+            content,
+            linkHref,
+            linkLabel,
+            long,
+            pageTitle,
         });
     }
 }

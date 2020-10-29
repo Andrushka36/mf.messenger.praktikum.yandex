@@ -6,7 +6,7 @@ import { ChatActionsModal } from '../components/ChatActionsModal';
 import { ChatInformation } from '../components/ChatInformation';
 import { ChatRenameForm } from '../components/ChatRenameForm';
 import { ChatHeader } from '../components/ChatHeader';
-import { ChatItem, IChatItem } from '../components/ChatItem';
+import { ChatItem } from '../components/ChatItem';
 import { NewMessage } from '../components/NewMessage';
 import { CharItemOutgoingMessage } from '../components/ChatItemOutgoingMessage';
 import { Chats } from '../components/Chats';
@@ -18,6 +18,7 @@ import { MessageForm } from '../components/MessageForm';
 import { ChatDeleteModal } from '../components/ChatDeleteModal';
 import { render } from '../utils/render';
 import { chatItemsData } from '../data/chatItemsData';
+import { IChatItem } from '../components/ChatItem/interfaces';
 
 const renameFormToggle = () => {
     chatRenameForm.visibilityToggle('grid');
@@ -28,8 +29,8 @@ const deleteModalToggle = () => {
     chatModalDelete.visibilityToggle('flex');
 }
 
-const renameIcon = new RenameIcon({});
-const deleteIcon = new DeleteIcon({});
+const renameIcon = new RenameIcon();
+const deleteIcon = new DeleteIcon();
 
 const chatActions = new ChatActions({
     buttons: [
@@ -56,7 +57,7 @@ const chatActionsModalToggle = () => {
     chatActionsModal.visibilityToggle();
 }
 
-const actionsIcon = new ActionsIcon({});
+const actionsIcon = new ActionsIcon();
 
 const chatActionsButton = new ChatActionsButton({
     className: 'chat-header__actions',
@@ -66,7 +67,7 @@ const chatActionsButton = new ChatActionsButton({
 });
 
 const chatRenameForm = new ChatRenameForm({
-    callback: renameFormToggle,
+    onSubmit: renameFormToggle,
     title: 'Вадим',
 });
 
@@ -84,11 +85,11 @@ const chatHeader = new ChatHeader({
     chatInformation,
 });
 
-const messages = new Messages({});
+const messages = new Messages();
 
-const messageForm = new MessageForm({});
+const messageForm = new MessageForm();
 
-const chatModalDelete = new ChatDeleteModal({});
+const chatModalDelete = new ChatDeleteModal();
 
 const chat = new Chat( {
     chatHeader,
@@ -115,8 +116,7 @@ const chatItems: ChatItem[] = chatItemsData.map(({ newMessage, incomingMessage, 
 const chats = new Chats({
     chatItems,
     content: chat,
-    onChange: (event: Event) => {
-        const { target } = event;
+    onChange: ({ target }: Event) => {
         const { value } = target as HTMLInputElement;
 
         console.log(`search: ${value}`);

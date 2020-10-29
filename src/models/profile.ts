@@ -1,5 +1,3 @@
-// потом к этим типам и типам из соседних файлов добавятся методы для получения/отправки данных через апи
-
 type UserRequestType = {
     first_name: string;
     second_name: string;

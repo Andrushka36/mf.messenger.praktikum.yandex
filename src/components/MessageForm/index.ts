@@ -15,10 +15,6 @@ export class MessageForm extends Component<{}> {
 
     public buttonFormMessageAttach!: ChatActionsButton;
 
-    constructor(props: {}) {
-        super(props);
-    }
-
     public message: string = '';
 
     public prerender() {
@@ -26,17 +22,17 @@ export class MessageForm extends Component<{}> {
             content: new ChatActions({
                 buttons: [
                     new ChatActionsItem({
-                        icon: new PhotoIcon({}),
+                        icon: new PhotoIcon(),
                         label: 'Фото или Видео',
                         onClick: () => console.log('Фото или Видео'),
                     }),
                     new ChatActionsItem({
-                        icon: new FileIcon({}),
+                        icon: new FileIcon(),
                         label: 'Файл',
                         onClick: () => console.log('Файл'),
                     }),
                     new ChatActionsItem({
-                        icon: new LocationIcon({}),
+                        icon: new LocationIcon(),
                         label: 'Локация',
                         onClick: () => console.log('Локация'),
                     }),
@@ -53,7 +49,7 @@ export class MessageForm extends Component<{}> {
 
         this.buttonFormMessageAttach = new ChatActionsButton({
             className: 'message-form__attach',
-            icon: new AttachIcon({}),
+            icon: new AttachIcon(),
             onClick: attachFormMessageModalToggle,
             title: 'Добавить вложение',
         });
@@ -63,8 +59,7 @@ export class MessageForm extends Component<{}> {
         return templator.compile(template, {
             attachModal: this.attachFormMessageModal,
             buttonAttach: this.buttonFormMessageAttach,
-            onChange: (event: Event) => {
-                const { target } = event;
+            onChange: ({ target }: Event) => {
                 const { value } = target as HTMLInputElement;
 
                 this.message = value;

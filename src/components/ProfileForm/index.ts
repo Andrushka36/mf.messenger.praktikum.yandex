@@ -6,7 +6,8 @@ import { UserFullType } from '../../models/profile';
 import { isEmail } from '../../utils/validation/isEmail';
 import { isShortPassword } from '../../utils/validation/isShortPassword';
 import { isPhone } from '../../utils/validation/isPhone';
-import { Form, ValidationFunctionType } from '../../lib/Form';
+import { Form } from '../../lib/Form';
+import { ValidationFunctionType } from '../../lib/Form/types';
 
 export class ProfileForm extends Component<{}> {
     constructor() {

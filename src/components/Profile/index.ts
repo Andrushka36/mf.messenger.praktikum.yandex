@@ -1,20 +1,9 @@
 import { Component } from '../../lib/Component';
 import { templator } from '../../lib/Templator';
 import { template } from './template';
-
-interface IProfile {
-    avatarSrc: string;
-    content: Component | Component[];
-    displayName: string;
-    long?: boolean
-    pageTitle: string;
-}
+import { IProfile } from './interfaces';
 
 export class Profile extends Component<IProfile> {
-    constructor(props: IProfile) {
-        super(props);
-    }
-
     render() {
         const { long, ...others } = this.props;
 

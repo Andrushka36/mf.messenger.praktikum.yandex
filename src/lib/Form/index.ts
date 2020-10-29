@@ -1,13 +1,5 @@
-import { cleanObject } from '../utils/clean-object';
-
-export type ValidationFunctionType<T> = (data: T) => string | undefined;
-
-export type FormType<T> = {
-    onSubmit: (values: T) => void;
-    wrapper: HTMLElement;
-    validator?: Partial<{ [key in keyof T]: ValidationFunctionType<T> }>;
-    exclude?: keyof T | (keyof T)[];
-}
+import { FormType, ValidationFunctionType } from './types';
+import { cleanObject } from '../../utils/cleanObject';
 
 export class Form<T> {
     public form: HTMLFormElement | null;
@@ -17,6 +9,10 @@ export class Form<T> {
     public errors: Partial<{ [key: string]: string }> = {};
 
     public touched: string[] = [];
+
+    private _INPUT_ERROR_CLASSNAME = 'form-input-error';
+
+    private _ERROR_CLASSNAME = 'form-error';
 
     constructor({
         onSubmit,
@@ -31,8 +27,7 @@ export class Form<T> {
         this.formData.forEach((_, name) => {
             const input = this.form?.querySelector(`[name="${name}"`);
 
-            input?.addEventListener('input', (event: Event) => {
-                const { target } = event;
+            input?.addEventListener('input', ({ target }: Event) => {
                 const { value } = target as HTMLInputElement;
 
                 this.setFieldValue(name, value);
@@ -79,25 +74,24 @@ export class Form<T> {
 
     public showErrors(necessarily: boolean = false) {
         this.formData.forEach((_, name) => {
-
             const input = this.form?.querySelector(`[name="${name}"`);
             const parent = input?.parentElement;
-            const errorElement = parent?.querySelector('.form-error') || document.createElement('div');
+            const errorElement = parent?.querySelector(`.${this._ERROR_CLASSNAME}`) || document.createElement('div');
 
             errorElement.textContent = '';
 
-            input?.classList.remove('form-input-error');
+            input?.classList.remove(`${this._INPUT_ERROR_CLASSNAME}`);
 
             const isTouched = this.touched.includes(name) || necessarily;
 
             const error = this.errors[name];
 
             if (isTouched && error) {
-                input?.classList.add('form-input-error');
+                input?.classList.add(`${this._INPUT_ERROR_CLASSNAME}`);
                 errorElement.textContent = error;
 
                 if (errorElement.parentElement === null) {
-                    errorElement.classList.add('form-error');
+                    errorElement.classList.add(this._ERROR_CLASSNAME);
                     parent?.appendChild(errorElement);
                 }
             }

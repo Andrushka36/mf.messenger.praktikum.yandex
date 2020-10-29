@@ -1,16 +1,15 @@
 import { Component } from '../../lib/Component';
 import { templator } from '../../lib/Templator';
 import { template } from './template';
+import { IChatActionsModal } from './interfaces';
 
-interface IModal {
-    content: Component;
-    x: 'left' | 'right';
-    y: 'top' | 'bottom';
-}
+export class ChatActionsModal extends Component<IChatActionsModal> {
+    public getXClassName(x: 'left' | 'right') {
+        return x === 'left' ? 'chat-modal_left' : 'chat-modal_right';
+    }
 
-export class ChatActionsModal extends Component<IModal> {
-    constructor(props: IModal) {
-        super(props);
+    public getYClassName(y: 'top' | 'bottom') {
+        return y === 'top' ? 'chat-modal_top' : 'chat-modal_bottom';
     }
 
     render() {
@@ -18,7 +17,7 @@ export class ChatActionsModal extends Component<IModal> {
 
         return templator.compile(template, {
             content,
-            className: `${x === 'left' ? 'chat-modal_left' : 'chat-modal_right'} ${y === 'top' ? 'chat-modal_top' : 'chat-modal_bottom'}`
+            className: `${this.getXClassName(x)} ${this.getYClassName(y)}`
         });
     }
 

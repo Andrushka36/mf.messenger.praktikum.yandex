@@ -1,11 +1,7 @@
 import { Component } from '../../lib/Component';
 import { templator } from '../../lib/Templator';
 import { template } from './template';
-
-interface IChatRenameForm {
-    callback: Function;
-    title: string;
-}
+import { IChatRenameForm } from './interfaces';
 
 export class ChatRenameForm extends Component<IChatRenameForm> {
     constructor(props: IChatRenameForm) {
@@ -17,12 +13,11 @@ export class ChatRenameForm extends Component<IChatRenameForm> {
     public message: string = '';
 
     render() {
-        const { callback, title } = this.props;
+        const { onSubmit, title } = this.props;
 
         return templator.compile(template, {
             title,
-            onChange: (event: Event) => {
-                const { target } = event;
+            onChange: ({ target }: Event) => {
                 const { value } = target as HTMLInputElement;
 
                 this.message = value;
@@ -31,7 +26,7 @@ export class ChatRenameForm extends Component<IChatRenameForm> {
                 e.preventDefault();
                 if (this.message !== '') {
                     console.log(`chat_name: ${this.message}`);
-                    callback();
+                    onSubmit();
                 }
             },
         });

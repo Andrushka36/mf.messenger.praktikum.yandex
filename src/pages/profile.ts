@@ -35,7 +35,7 @@ const profile = new Profile({
                 }),
             ],
         }),
-        new ProfileViewFooter({}),
+        new ProfileViewFooter(),
     ],
     displayName: 'Васян',
     pageTitle: 'Профиль'

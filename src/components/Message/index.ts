@@ -1,32 +1,47 @@
 import { Component } from '../../lib/Component';
 import { templator } from '../../lib/Templator';
 import { template } from './template';
+import { IMessage } from './interfaces';
 import { SentIcon } from '../../assets/SentIcon';
 import { ReadIcon } from '../../assets/ReadIcon';
-
-interface IMessage {
-    attach?: boolean;
-    content: Component | Component[];
-    status?: 'read' | 'sent';
-    time: string;
-    type: 'incoming' | 'outgoing';
-}
 
 export class Message extends Component<IMessage> {
     sentIcon!: Component;
 
     readIcon!: Component;
 
-    constructor(props: IMessage) {
-        super(props);
+    public getAttachClassName(attach?: boolean) {
+        return attach ? 'message_attach' : '';
     }
 
-    prerender() {
-        this.sentIcon = new SentIcon({});
-        this.readIcon = new ReadIcon({});
+    public getStatusClassName(type: 'incoming' | 'outgoing', status?: 'read' | 'sent') {
+        return type === 'outgoing' ? (
+            status === 'read' ? 'message_read' : (
+                status === 'sent' ? 'message_sent' : ''
+            )
+        ) : '';
     }
 
-    render() {
+    public getTypeClassName(type: 'incoming' | 'outgoing') {
+        return type === 'incoming' ? 'message_incoming' : (
+            type === 'outgoing' ? 'message_outgoing' : ''
+        );
+    }
+
+    public getTimeIcon(type: 'incoming' | 'outgoing', status?: 'read' | 'sent') {
+        return type === 'outgoing' ? (
+            status === 'read' ? this.readIcon : (
+                status === 'sent' ? this.sentIcon : ''
+            )
+        ) : '';
+    }
+
+    public prerender() {
+        this.sentIcon = new SentIcon();
+        this.readIcon = new ReadIcon();
+    }
+
+    public render() {
         const {
             attach,
             content,
@@ -35,25 +50,11 @@ export class Message extends Component<IMessage> {
             type,
         } = this.props;
 
-        const attachClassName = attach ? 'message_attach' : '';
-        const statusClassName = type === 'outgoing' ? (
-            status === 'read' ? 'message_read' : (
-                status === 'sent' ? 'message_sent' : ''
-            )
-        ) : '';
-        const typeClassName = type === 'incoming' ? 'message_incoming' : (
-            type === 'outgoing' ? 'message_outgoing' : ''
-        );
-
         return templator.compile(template, {
-            className: `${attachClassName} ${statusClassName} ${typeClassName}`,
+            className: `${this.getAttachClassName(attach)} ${this.getStatusClassName(type, status)} ${this.getTypeClassName(type)}`,
             content,
             time,
-            timeIcon: type === 'outgoing' ? (
-                status === 'read' ? this.readIcon : (
-                    status === 'sent' ? this.sentIcon : ''
-                )
-            ) : '',
+            timeIcon: this.getTimeIcon(type, status),
         });
     }
 }
