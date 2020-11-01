@@ -1,4 +1,4 @@
-type UserRequestType = {
+export type UserRequestType = {
     first_name: string;
     second_name: string;
     display_name: string;
@@ -7,11 +7,11 @@ type UserRequestType = {
     phone: string;
 }
 
-type UserAvatarType = {
+export type UserAvatarType = {
     avatar: File;
 }
 
-type ChangePasswordRequestType = {
+export type ChangePasswordRequestType = {
     oldPassword: string;
     newPassword: string;
 }

@@ -1,10 +1,10 @@
 import { LoginForm } from '../components/LoginForm';
 import { LoginFormRow } from '../components/LoginFormRow';
-import { render } from '../utils/render';
 import { SignUpFullType } from '../models/signUp';
 import { isShortPassword } from '../utils/validation/isShortPassword';
 import { isPhone } from '../utils/validation/isPhone';
 import { isEmail } from '../utils/validation/isEmail';
+import { signUpDTO } from '../api/signUpDTO';
 
 const firstName = new LoginFormRow({
     label: 'Имя',
@@ -55,7 +55,7 @@ const repeatPassword = new LoginFormRow({
     value: 'зфыыцокв',
 });
 
-const loginForm = new LoginForm<SignUpFullType>({
+export const registration = new LoginForm<SignUpFullType>({
     buttonLabel: 'Зарегистрироваться',
     content: [
         firstName,
@@ -67,11 +67,11 @@ const loginForm = new LoginForm<SignUpFullType>({
         repeatPassword,
     ],
     excludeOnSubmit: 'repeat_password',
-    linkHref: '/pages/login',
+    linkHref: '/login',
     linkLabel: 'Войти',
     long: true,
     onSubmit: (values) => {
-        console.log(values);
+        signUpDTO.create(values);
     },
     pageTitle: 'Регистрация',
     validator: {
@@ -97,5 +97,3 @@ const loginForm = new LoginForm<SignUpFullType>({
         },
     }
 });
-
-render('#root', loginForm);

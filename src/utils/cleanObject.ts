@@ -1,4 +1,4 @@
-export const cleanObject = (obj: { [key: string]: string }) => {
+export const cleanObject = (obj: { [key: string]: string | undefined | null }) => {
     const res: { [key: string]: string } = {};
 
     for (const key in obj) {
@@ -6,7 +6,7 @@ export const cleanObject = (obj: { [key: string]: string }) => {
             const value = obj[key];
 
             if (value !== undefined && value !== null) {
-                res[key] = obj[key];
+                res[key] = obj[key] as string;
             }
         }
     }

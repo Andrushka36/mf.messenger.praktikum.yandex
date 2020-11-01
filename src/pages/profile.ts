@@ -2,9 +2,8 @@ import { Profile } from '../components/Profile';
 import { ProfileSection } from '../components/ProfileSection';
 import { ProfileRow } from '../components/ProfileRow';
 import { ProfileViewFooter } from '../components/ProfileViewFooter';
-import { render } from '../utils/render';
 
-const profile = new Profile({
+export const profile = new Profile({
     avatarSrc: '/assets/avatar.jpg',
     content: [
         new ProfileSection({
@@ -40,5 +39,3 @@ const profile = new Profile({
     displayName: 'Васян',
     pageTitle: 'Профиль'
 });
-
-render('#root', profile);

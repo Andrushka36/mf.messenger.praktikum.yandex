@@ -112,9 +112,11 @@ export class Component<T extends {} = any> {
         return new Proxy<T>(props, {
             set: (target: T, prop: string, value: string | number | boolean | Function) => {
 
+                const oldProps = { ...this.props };
+
                 (target as unknown as { [key: string]: string | number | boolean | Function })[prop] = value;
 
-                this.eventBus().emit(Component.EVENTS.FLOW_SCDU);
+                this.eventBus().emit(Component.EVENTS.FLOW_SCDU, oldProps, target);
 
                 return true;
             }

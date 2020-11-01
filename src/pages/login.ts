@@ -1,33 +1,33 @@
 import { LoginForm } from '../components/LoginForm';
 import { LoginFormRow } from '../components/LoginFormRow';
 import { SignInType } from '../models/signIn';
-import { render } from '../utils/render';
 import { isShortPassword } from '../utils/validation/isShortPassword';
+import { signInDTO } from '../api/signInDTO';
 
-const login = new LoginFormRow({
+const loginElement = new LoginFormRow({
     label: 'Логин',
     name: 'login',
     type: 'text',
     value: 'username',
 });
 
-const password = new LoginFormRow({
+const passwordElement = new LoginFormRow({
     label: 'Пароль',
     name: 'password',
     type: 'password',
     value: 'password',
 });
 
-const loginForm = new LoginForm<SignInType>({
+export const login = new LoginForm<SignInType>({
     buttonLabel: 'Авторизоваться',
     content: [
-        login,
-        password,
+        loginElement,
+        passwordElement,
     ],
-    linkHref: '/pages/registration',
+    linkHref: 'registration',
     linkLabel: 'Нет аккаунта?',
     onSubmit: (values) => {
-        console.log(values);
+        signInDTO.create(values);
     },
     pageTitle: 'Вход',
     validator: {
@@ -43,5 +43,3 @@ const loginForm = new LoginForm<SignInType>({
         }
     }
 });
-
-render('#root', loginForm);

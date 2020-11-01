@@ -16,7 +16,6 @@ import { DeleteIcon } from '../assets/DeleteIcon';
 import { Messages } from '../components/Messages';
 import { MessageForm } from '../components/MessageForm';
 import { ChatDeleteModal } from '../components/ChatDeleteModal';
-import { render } from '../utils/render';
 import { chatItemsData } from '../data/chatItemsData';
 import { IChatItem } from '../components/ChatItem/interfaces';
 
@@ -91,7 +90,7 @@ const messageForm = new MessageForm();
 
 const chatModalDelete = new ChatDeleteModal();
 
-const chat = new Chat( {
+const chatBlock = new Chat( {
     chatHeader,
     deleteModal: chatModalDelete,
     messages,
@@ -113,9 +112,9 @@ const chatItems: ChatItem[] = chatItemsData.map(({ newMessage, incomingMessage, 
     return new ChatItem({ ...props } as IChatItem);
 });
 
-const chats = new Chats({
+export const chat = new Chats({
     chatItems,
-    content: chat,
+    content: chatBlock,
     onChange: ({ target }: Event) => {
         const { value } = target as HTMLInputElement;
 
@@ -123,5 +122,3 @@ const chats = new Chats({
     },
     pageTitle: 'Выбор чата',
 });
-
-render('#root', chats);

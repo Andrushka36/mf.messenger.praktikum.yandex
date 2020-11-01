@@ -8,13 +8,16 @@ import { isShortPassword } from '../../utils/validation/isShortPassword';
 import { isPhone } from '../../utils/validation/isPhone';
 import { Form } from '../../lib/Form';
 import { ValidationFunctionType } from '../../lib/Form/types';
+import { profileDTO } from '../../api/profileDTO';
+import { profileAvatarDTO } from '../../api/profileAvatarDTO';
+import { profilePasswordDTO } from '../../api/profilePasswordDTO';
 
 export class ProfileForm extends Component<{}> {
     constructor() {
         super({});
 
         if (this.element instanceof HTMLElement) {
-            new Form({
+            new Form<UserFullType>({
                 onSubmit: this.onSubmit,
                 validator: this.validator,
                 wrapper: this.element,
@@ -22,8 +25,35 @@ export class ProfileForm extends Component<{}> {
         }
     }
 
-    onSubmit = (values: UserFullType) => {
-        console.log(values);
+    onSubmit = ({
+        first_name,
+        second_name,
+        display_name,
+        login,
+        email,
+        phone,
+        avatar,
+        oldPassword,
+        newPassword
+    }: UserFullType) => {
+        const profile = {
+            first_name,
+            second_name,
+            display_name,
+            login,
+            email,
+            phone
+        };
+        profileDTO.create(profile);
+
+        if (avatar && Object.keys(avatar).length !== 0) {
+            profileAvatarDTO.create({ avatar });
+        }
+
+        profilePasswordDTO.create({
+            oldPassword,
+            newPassword,
+        });
     }
 
     validator: Partial<{ [key in keyof UserFullType]: ValidationFunctionType<UserFullType> }> = {

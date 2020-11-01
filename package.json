@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
+    "test:coverage": "nyc mocha",
     "server": "node server.js",
     "clean": "rm -rf ./static/js",
     "check": "tsc --watch"
@@ -15,6 +16,19 @@
     "express": "4.17.1"
   },
   "devDependencies": {
+    "@babel/core": "7.12.3",
+    "@babel/preset-env": "7.12.1",
+    "@babel/preset-typescript": "7.12.1",
+    "@babel/register": "7.12.1",
+    "@types/chai": "^4.2.14",
+    "@types/jsdom": "^16.2.5",
+    "@types/mocha": "^8.0.3",
+    "@types/sinon": "^9.0.8",
+    "chai": "4.2.0",
+    "jsdom": "16.4.0",
+    "mocha": "8.2.0",
+    "nyc": "15.1.0",
+    "sinon": "9.2.1",
     "typescript": "4.0.3"
   }
 }

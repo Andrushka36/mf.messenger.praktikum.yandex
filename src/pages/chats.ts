@@ -3,7 +3,6 @@ import { ChatItem } from '../components/ChatItem';
 import { SelectChat } from '../components/SelectChat';
 import { NewMessage  } from '../components/NewMessage';
 import { CharItemOutgoingMessage } from '../components/ChatItemOutgoingMessage';
-import { render } from '../utils/render';
 import { chatItemsData } from '../data/chatItemsData';
 import { IChatItem } from '../components/ChatItem/interfaces';
 
@@ -24,7 +23,7 @@ const chatItems: ChatItem[] = chatItemsData.map(({ newMessage, incomingMessage, 
     return new ChatItem({ ...props } as IChatItem);
 });
 
-const chats = new Chats({
+export const chats = new Chats({
     chatItems,
     content: selectChat,
     onChange: ({ target }: Event) => {
@@ -33,7 +32,4 @@ const chats = new Chats({
         console.log(`search: ${value}`);
     },
     pageTitle: 'Выбор чата',
-})
-
-
-render('#root', chats);
+});
