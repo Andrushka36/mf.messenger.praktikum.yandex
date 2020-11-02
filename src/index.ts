@@ -13,13 +13,13 @@ const router = new Router('#root');
 
 router
     .use('/', chats, 'Выберите чат')
-    .use('/404/', error404, 'Ошибка 404')
-    .use('/500/', error500, 'Ошибка 500')
-    .use('/chat/', chat, 'Чат')
-    .use('/edit-profile/', editProfile, 'Редактирование профиля')
-    .use('/login/', login, 'Вход')
-    .use('/profile/', profile, 'Профиль')
-    .use('/registration/', registration, 'Регистрация')
+    .use('/500', error500, 'Ошибка 500')
+    .use('/chat', chat, 'Чат')
+    .use('/edit-profile', editProfile, 'Редактирование профиля')
+    .use('/login', login, 'Вход')
+    .use('/profile', profile, 'Профиль')
+    .use('/registration', registration, 'Регистрация')
+    .useFallback('/404', error404, 'Ошибка 404')
     .start();
 
 httpTransport.setDomain('https://ya-praktikum.tech/api/v2');

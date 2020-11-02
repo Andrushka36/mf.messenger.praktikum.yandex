@@ -24,7 +24,7 @@ export const login = new LoginForm<SignInType>({
         loginElement,
         passwordElement,
     ],
-    linkHref: 'registration',
+    linkHref: '/registration',
     linkLabel: 'Нет аккаунта?',
     onSubmit: (values) => {
         signInDTO.create(values);

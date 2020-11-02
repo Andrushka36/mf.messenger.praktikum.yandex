@@ -16,12 +16,9 @@ export class Route {
         }
     }
 
-    isEqual(a: string, b: string) {
-        return a === b;
-    }
-
     match(pathname: string) {
-        return this.isEqual(pathname, this._pathname);
+        const regexp = new RegExp(`^${this._pathname}\/?$`);
+        return regexp.test(pathname);
     }
 
     render() {

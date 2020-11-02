@@ -10,6 +10,8 @@ export class Router {
 
     private _currentRoute: Route | null = null;
 
+    public fallback: Route | null = null;
+
     constructor(
         private _selector: string,
     ) {
@@ -18,6 +20,18 @@ export class Router {
         }
 
         Router.__instance = this;
+
+        document.body.addEventListener('click', (event: Event) => {
+            const path = event.composedPath() as unknown as NodeListOf<HTMLElement>;
+            const link = Array.from(path).find(({ tagName }) => tagName === 'A');
+            if (link !== undefined) {
+                const url = link.getAttribute('href');
+                if (url !== null) {
+                    this.go(url);
+                }
+                event.preventDefault();
+            }
+        });
     }
 
     use(pathname: string, block: Component, title: string) {
@@ -37,13 +51,13 @@ export class Router {
     }
 
     _onRoute(pathname: string) {
-        const route = this.getRoute(pathname);
+        const route = this.getRoute(pathname) || this.fallback;
 
         if (this._currentRoute) {
             this._currentRoute.leave();
         }
 
-        this._currentRoute = route || null;
+        this._currentRoute = route;
 
         if (this._currentRoute !== null) {
             this._currentRoute.render();
@@ -66,5 +80,11 @@ export class Router {
 
     getRoute(pathname: string) {
         return this.routes.find(route => route.match(pathname));
+    }
+
+    useFallback(pathname: string, block: Component, title: string) {
+        this.fallback = new Route(pathname, block, title, this._selector);
+
+        return this;
     }
 }
