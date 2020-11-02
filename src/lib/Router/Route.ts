@@ -17,7 +17,7 @@ export class Route {
     }
 
     match(pathname: string) {
-        const regexp = new RegExp(`^${this._pathname}\/?$`);
+        const regexp = new RegExp(`^${this._pathname}\/?$`, 'i');
         return regexp.test(pathname);
     }
 
