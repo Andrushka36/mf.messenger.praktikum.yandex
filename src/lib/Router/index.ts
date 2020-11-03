@@ -88,3 +88,5 @@ export class Router {
         return this;
     }
 }
+
+export const router = new Router('#root');

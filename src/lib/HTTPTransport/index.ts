@@ -8,6 +8,10 @@ export class HTTPTransport {
         this._domain = domain;
     };
 
+    getDomain = () => {
+        return this._domain;
+    }
+
     get = (url: string, options: HTTPTransportOptionsType = {}) => {
         const { body } = options;
         const newUrl = url + queryStringify(body);
@@ -31,10 +35,19 @@ export class HTTPTransport {
 
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open(method, this._domain + url);
+            xhr.open(method, this.getDomain() + url);
+            // Дмитрий, привет! помню твое ревью на 1-ом спринте :)
+            // спасибо за комментарии!
+            // на самом деле, часто в различных проектах встречаю такого рода геттеры
+            // можешь плз пояснить, какие преимущества у такого подхода
+            // по сравнению с обращением напрямую к переменной
 
             xhr.onload = function() {
-                resolve(xhr.response);
+                if (xhr.status === 200) {
+                    resolve(xhr.response);
+                } else {
+                    reject(xhr.response);
+                }
             };
 
             xhr.onabort = reject;

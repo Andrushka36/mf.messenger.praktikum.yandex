@@ -1,4 +1,4 @@
-import { Router } from './lib/Router';
+import { router } from './lib/Router';
 import { error404 } from './pages/404';
 import { error500 } from './pages/500';
 import { chat } from './pages/chat';
@@ -8,8 +8,6 @@ import { login } from './pages/login';
 import { profile } from './pages/profile';
 import { registration } from './pages/registration';
 import { httpTransport } from './lib/HTTPTransport';
-
-const router = new Router('#root');
 
 router
     .use('/', chats, 'Выберите чат')

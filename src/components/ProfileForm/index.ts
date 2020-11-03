@@ -11,6 +11,7 @@ import { ValidationFunctionType } from '../../lib/Form/types';
 import { profileDTO } from '../../api/profileDTO';
 import { profileAvatarDTO } from '../../api/profileAvatarDTO';
 import { profilePasswordDTO } from '../../api/profilePasswordDTO';
+import { router } from '../../lib/Router';
 
 export class ProfileForm extends Component<{}> {
     constructor() {
@@ -44,16 +45,25 @@ export class ProfileForm extends Component<{}> {
             email,
             phone
         };
-        profileDTO.create(profile);
+
+        const requests = [
+            profileDTO.create(profile),
+            profilePasswordDTO.create({
+                oldPassword,
+                newPassword,
+            }),
+        ];
 
         if (avatar && Object.keys(avatar).length !== 0) {
-            profileAvatarDTO.create({ avatar });
+            requests.push(profileAvatarDTO.create({ avatar }));
         }
 
-        profilePasswordDTO.create({
-            oldPassword,
-            newPassword,
-        });
+        Promise.allSettled(requests)
+            .then(res => {
+                if (res.some(({ status }) => status === 'rejected')) {
+                    router.go('/500');
+                }
+            });
     }
 
     validator: Partial<{ [key in keyof UserFullType]: ValidationFunctionType<UserFullType> }> = {
