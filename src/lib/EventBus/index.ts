@@ -1,34 +1,38 @@
 export class EventBus {
-    private readonly listeners: { [key: string]: Function[] };
+    private readonly _listeners: { [key: string]: Function[] };
 
     constructor() {
-        this.listeners = {};
+        this._listeners = {};
+    }
+
+    public getListeners() {
+        return this._listeners;
     }
 
     public on(event: string, callback: Function) {
-        if (!this.listeners[event]) {
-            this.listeners[event] = [];
+        if (!this._listeners[event]) {
+            this._listeners[event] = [];
         }
 
-        this.listeners[event].push(callback);
+        this._listeners[event].push(callback);
     }
 
     public off(event: string, callback: Function) {
-        if (!this.listeners[event]) {
+        if (!this._listeners[event]) {
             throw new Error(`Нет события: ${event}`);
         }
 
-        this.listeners[event] = this.listeners[event].filter(
+        this._listeners[event] = this._listeners[event].filter(
             listener => listener !== callback
         );
     }
 
     public emit(event: string, ...args: any[]) {
-        if (!this.listeners[event]) {
+        if (!this._listeners[event]) {
             throw new Error(`Нет события: ${event}`);
         }
 
-        this.listeners[event].forEach(function(listener) {
+        this._listeners[event].forEach(function(listener) {
             listener(...args);
         });
     }

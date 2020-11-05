@@ -36,17 +36,20 @@ export class HTTPTransport {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open(method, this.getDomain() + url);
-            // Дмитрий, привет! помню твое ревью на 1-ом спринте :)
-            // спасибо за комментарии!
-            // на самом деле, часто в различных проектах встречаю такого рода геттеры
-            // можешь плз пояснить, какие преимущества у такого подхода
-            // по сравнению с обращением напрямую к переменной
 
             xhr.onload = function() {
-                if (xhr.status === 200) {
-                    resolve(xhr.response);
+                const {
+                    response,
+                    status,
+                } = xhr;
+
+                if (status === 200) {
+                    resolve(response);
                 } else {
-                    reject(xhr.response);
+                    reject({
+                        response,
+                        status,
+                    });
                 }
             };
 

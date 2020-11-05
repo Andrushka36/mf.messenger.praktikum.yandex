@@ -5,7 +5,7 @@ import { isShortPassword } from '../utils/validation/isShortPassword';
 import { isPhone } from '../utils/validation/isPhone';
 import { isEmail } from '../utils/validation/isEmail';
 import { signUpDTO } from '../api/signUpDTO';
-import { router } from '../lib/Router';
+import { errorHandler } from '../lib/ErrorHandler';
 
 const firstName = new LoginFormRow({
     label: 'Имя',
@@ -74,8 +74,8 @@ export const registration = new LoginForm<SignUpFullType>({
     onSubmit: (values) => {
         signUpDTO
             .create(values)
-            .catch(() => {
-                router.go('/500');
+            .catch(({ status }) => {
+                errorHandler.handle(status);
             });
     },
     pageTitle: 'Регистрация',

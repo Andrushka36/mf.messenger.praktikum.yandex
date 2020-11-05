@@ -3,7 +3,7 @@ import { LoginFormRow } from '../components/LoginFormRow';
 import { SignInType } from '../models/signIn';
 import { isShortPassword } from '../utils/validation/isShortPassword';
 import { signInDTO } from '../api/signInDTO';
-import { router } from '../lib/Router';
+import { errorHandler } from '../lib/ErrorHandler';
 
 const loginElement = new LoginFormRow({
     label: 'Логин',
@@ -30,8 +30,8 @@ export const login = new LoginForm<SignInType>({
     onSubmit: (values) => {
         signInDTO
             .create(values)
-            .catch(() => {
-                router.go('/500');
+            .catch(({ status }) => {
+                errorHandler.handle(status);
             });
     },
     pageTitle: 'Вход',

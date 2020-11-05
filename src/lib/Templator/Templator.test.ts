@@ -8,8 +8,6 @@ describe('Templator', () => {
     before(() => {
         const window = new JSDOM(`<!DOCTYPE html>`).window;
 
-        // @ts-ignore
-        global.window = window;
         global.document = window.document;
         global.HTMLElement = window.HTMLElement;
         global.MouseEvent = window.MouseEvent;

@@ -7,8 +7,6 @@ describe('render', () => {
     before(() => {
         const window = new JSDOM(`<!DOCTYPE html><div id="app"></div>`).window;
 
-        // @ts-ignore
-        global.window = window;
         global.document = window.document;
     });
 

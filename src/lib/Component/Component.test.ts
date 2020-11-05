@@ -9,10 +9,7 @@ describe('Component', () => {
     before(() => {
         const window = new JSDOM(`<!DOCTYPE html>`).window;
 
-        // @ts-ignore
-        global.window = window;
         global.document = window.document;
-
         global.HTMLElement = window.HTMLElement;
 
         node = document.createElement('div');

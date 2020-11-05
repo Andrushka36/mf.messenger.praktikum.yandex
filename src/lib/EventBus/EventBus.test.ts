@@ -12,8 +12,7 @@ describe('EventBus', () => {
         eventBus.on('bang', fn1);
         eventBus.on('bang', fn2);
 
-        // @ts-ignore
-        expect(eventBus.listeners).to.deep.equal({ bang: [fn1, fn2] });
+        expect(eventBus.getListeners()).to.deep.equal({ bang: [fn1, fn2] });
     });
 
     it('checking removing event listener', () => {
@@ -26,8 +25,7 @@ describe('EventBus', () => {
         eventBus.on('bang', fn2);
         eventBus.off('bang', fn1)
 
-        // @ts-ignore
-        expect(eventBus.listeners).to.deep.equal({ bang: [fn2] });
+        expect(eventBus.getListeners()).to.deep.equal({ bang: [fn2] });
     });
 
     it('checking emitting event', () => {

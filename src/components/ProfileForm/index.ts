@@ -11,7 +11,7 @@ import { ValidationFunctionType } from '../../lib/Form/types';
 import { profileDTO } from '../../api/profileDTO';
 import { profileAvatarDTO } from '../../api/profileAvatarDTO';
 import { profilePasswordDTO } from '../../api/profilePasswordDTO';
-import { router } from '../../lib/Router';
+import { errorHandler } from '../../lib/ErrorHandler';
 
 export class ProfileForm extends Component<{}> {
     constructor() {
@@ -60,8 +60,9 @@ export class ProfileForm extends Component<{}> {
 
         Promise.allSettled(requests)
             .then(res => {
-                if (res.some(({ status }) => status === 'rejected')) {
-                    router.go('/500');
+                const response = res.find(({ status }) => status === 'rejected');
+                if (response !== undefined && response.status !== undefined) {
+                    errorHandler.handle((response as PromiseRejectedResult).reason.status);
                 }
             });
     }

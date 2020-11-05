@@ -5,6 +5,13 @@ import { IError } from './interfaces';
 
 export class Err extends Component<IError> {
     render() {
-        return templator.compile(template, { ...this.props });
+        const {
+            code,
+            text = 'Мы уже фиксим',
+        } = this.props;
+        return templator.compile(template, {
+            code,
+            text,
+        });
     }
 }
