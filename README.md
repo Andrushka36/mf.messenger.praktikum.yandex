@@ -1,5 +1,13 @@
 # Проектная работа №1. Чат
 
+1. [Описание](#описание)
+2. [Функциональные возможности](#функциональные-возможности)
+3. [Макет](#макет)
+4. [Установка, запуск и сборка](#установка-запуск-и-сборка)
+5. [Линтеры и тесты](#линтеры-и-тесты)
+6. [Демо](#демо)
+7. [Скриншоты](#скриншоты)
+
 ## Описание
 
 Классный мессенджер, клиентская часть которого написана без использования JavaScript-библиотек/фреймворков.
@@ -65,3 +73,30 @@ npm run test
 ## Демо
 
 Приложение доступно на [Heroku](https://cryptic-springs-91020.herokuapp.com/).
+
+## Скриншоты
+
+<table>
+    <tbody>
+        <tr>
+            <td width="50%">
+                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/chat.jpg?raw=true" alt="Чат" />
+                Чат
+            </td>
+            <td width="50%">
+                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/add-users.jpg?raw=true" alt="Добавление пользователей" />
+                Добавление пользователей
+            </td>
+        </tr>
+        <tr>
+            <td width="50%">
+                <img src="https://github.com/Andrushka36/test1/blob/main/screenshots/registration.jpg" alt="Регистрация" />
+                Регистрация
+            </td>
+            <td width="50%">
+                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/profile.jpg?raw=true" alt="Профиль" />
+                Профиль
+            </td>
+        </tr>
+    </tbody>
+</table>
