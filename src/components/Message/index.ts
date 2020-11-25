@@ -4,6 +4,8 @@ import { template } from './template';
 import { IMessage } from './interfaces';
 import { SentIcon } from '../../assets/SentIcon';
 import { ReadIcon } from '../../assets/ReadIcon';
+import { MessageStatus, MessageType } from '../../models/chats';
+import { userStore } from '../../stores';
 
 export class Message extends Component<IMessage> {
     sentIcon!: Component;
@@ -14,29 +16,23 @@ export class Message extends Component<IMessage> {
         return attach ? 'message_attach' : '';
     }
 
-    public getStatusClassName(type: 'incoming' | 'outgoing', status?: 'read' | 'sent') {
-        return type === 'outgoing' ? (
-            status === 'read' ? 'message_read' : (
-                status === 'sent' ? 'message_sent' : ''
+    public getStatusClassName(type: MessageType, status?: MessageStatus) {
+        return type === MessageType.OUTGOING ? `message_${status}` : '';
+    }
+
+    public getTypeClassName(type: MessageType) {
+        return `message_${type}`;
+    }
+
+    public getTimeIcon(type: MessageType, status?: MessageStatus) {
+        return type === MessageType.OUTGOING ? (
+            status === MessageStatus.READ ? this.readIcon : (
+                status === MessageStatus.SENT ? this.sentIcon : ''
             )
         ) : '';
     }
 
-    public getTypeClassName(type: 'incoming' | 'outgoing') {
-        return type === 'incoming' ? 'message_incoming' : (
-            type === 'outgoing' ? 'message_outgoing' : ''
-        );
-    }
-
-    public getTimeIcon(type: 'incoming' | 'outgoing', status?: 'read' | 'sent') {
-        return type === 'outgoing' ? (
-            status === 'read' ? this.readIcon : (
-                status === 'sent' ? this.sentIcon : ''
-            )
-        ) : '';
-    }
-
-    public prerender() {
+    public async prerender() {
         this.sentIcon = new SentIcon();
         this.readIcon = new ReadIcon();
     }
@@ -48,14 +44,19 @@ export class Message extends Component<IMessage> {
             status,
             time,
             type,
+            user,
+            userId,
         } = this.props;
+
+        const { id } = userStore.getData();
 
         return templator.compile(template, {
             className: `${this.getAttachClassName(attach)} ${this.getStatusClassName(type, status)} ${this.getTypeClassName(type)}`,
             content,
+            linkHref: `/profile${id !== userId ? `/${userId}` : ''}`,
             time,
             timeIcon: this.getTimeIcon(type, status),
+            user,
         });
     }
 }
-

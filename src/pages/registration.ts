@@ -6,54 +6,57 @@ import { isPhone } from '../utils/validation/isPhone';
 import { isEmail } from '../utils/validation/isEmail';
 import { signUpDTO } from '../api/signUpDTO';
 import { errorHandler } from '../lib/ErrorHandler';
+import { authorization } from '../lib/Authorization';
+import { router } from '../lib/Router';
+import { Err } from '../components/Error';
 
 const firstName = new LoginFormRow({
     label: 'Имя',
     name: 'first_name',
     type: 'text',
-    value: 'Вася',
+    value: '',
 });
 
 const secondName = new LoginFormRow({
     label: 'Фамилия',
     name: 'second_name',
     type: 'text',
-    value: 'Васин',
+    value: '',
 });
 
 const login = new LoginFormRow({
     label: 'Логин',
     name: 'login',
     type: 'text',
-    value: 'username',
+    value: '',
 });
 
 const email = new LoginFormRow({
     label: 'Почта',
     name: 'email',
     type: 'email',
-    value: 'pochta@yandex.ru',
+    value: '',
 });
 
 const phone = new LoginFormRow({
     label: 'Телефон',
     name: 'phone',
     type: 'tel',
-    value: '+7 903 123 4567',
+    value: '',
 });
 
 const password = new LoginFormRow({
     label: 'Пароль',
     name: 'password',
     type: 'password',
-    value: 'password',
+    value: '',
 });
 
 const repeatPassword = new LoginFormRow({
     label: 'Пароль (еще раз)',
     name: 'repeat_password',
     type: 'password',
-    value: 'зфыыцокв',
+    value: '',
 });
 
 export const registration = new LoginForm<SignUpFullType>({
@@ -74,7 +77,27 @@ export const registration = new LoginForm<SignUpFullType>({
     onSubmit: (values) => {
         signUpDTO
             .create(values)
-            .catch(({ status }) => {
+            .then(() => authorization.check())
+            .then(() => {
+                router.go('/');
+            })
+            .catch(({ status, response  }) => {
+                try {
+                    const { reason } = JSON.parse(response);
+
+                    if (reason === 'Login already exists') {
+                        router.renderComponent(new Err({
+                            code: status,
+                            linkHref: '/registration',
+                            linkLabel: 'Назад к регистрации',
+                            text: 'Пользователь с таким логином уже существует',
+                        }));
+                    }
+                    return;
+                }
+                catch (e) {
+
+                }
                 errorHandler.handle(status);
             });
     },
@@ -82,12 +105,12 @@ export const registration = new LoginForm<SignUpFullType>({
     validator: {
         email: ({ email }) => {
             if (!isEmail(email)) {
-                return 'Укажите валидный email'
+                return 'Укажите валидный email';
             }
         },
         password: ({ password }) => {
             if (isShortPassword(password)) {
-                return 'Максимальная длина пароля - 8 символов'
+                return 'Максимальная длина пароля - 8 символов';
             }
         },
         phone: ({ phone }) => {
@@ -100,5 +123,5 @@ export const registration = new LoginForm<SignUpFullType>({
                 return 'Пароли не совпадают';
             }
         },
-    }
+    },
 });

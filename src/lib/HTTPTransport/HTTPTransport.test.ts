@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { fake } from 'sinon';
 import { HTTPTransport } from './index';
-import { HTTPMethods } from "./types";
+import { HTTPMethods } from './types';
 
 describe('HTTPTransport', () => {
     const openMock = fake();
@@ -9,17 +9,17 @@ describe('HTTPTransport', () => {
     const setRequestHeaderMock = fake();
 
     before(() => {
-       global.XMLHttpRequest = class XMLHttpRequestMock {
-           open(...args: any[]) {
-               return openMock(...args);
-           };
-           send(...args: any[]) {
-               return sendMock(...args);
-           }
-           setRequestHeader(...args: any[]) {
-               return setRequestHeaderMock(...args);
-           };
-       } as unknown as typeof XMLHttpRequest;
+        global.XMLHttpRequest = class XMLHttpRequestMock {
+            open(...args: any[]) {
+                return openMock(...args);
+            };
+            send(...args: any[]) {
+                return sendMock(...args);
+            }
+            setRequestHeader(...args: any[]) {
+                return setRequestHeaderMock(...args);
+            };
+        } as unknown as typeof XMLHttpRequest;
     });
 
     afterEach(() => {
@@ -33,8 +33,7 @@ describe('HTTPTransport', () => {
 
         httpTransport.setDomain('new-domain');
 
-        // @ts-ignore
-        expect(httpTransport._domain).to.equal('new-domain');
+        expect(httpTransport.getDomain()).to.equal('new-domain');
     });
 
     it('checking setRequestHeaders', () => {
@@ -42,8 +41,9 @@ describe('HTTPTransport', () => {
 
         httpTransport.request('test', { method: HTTPMethods.GET, headers: { prop1: 'value1', prop2: 'value2' } });
 
-        expect(setRequestHeaderMock.getCall(0).args).to.deep.equal(['prop1', 'value1']);
-        expect(setRequestHeaderMock.getCall(1).args).to.deep.equal(['prop2', 'value2']);
+        expect(setRequestHeaderMock.getCall(0).args).to.deep.equal(['content-type', 'application/json']);
+        expect(setRequestHeaderMock.getCall(1).args).to.deep.equal(['prop1', 'value1']);
+        expect(setRequestHeaderMock.getCall(2).args).to.deep.equal(['prop2', 'value2']);
     });
 
     it('checking method get', () => {

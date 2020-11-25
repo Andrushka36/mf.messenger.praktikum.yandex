@@ -6,7 +6,7 @@ import { Component } from '../Component';
 
 describe('Templator', () => {
     before(() => {
-        const window = new JSDOM(`<!DOCTYPE html>`).window;
+        const { window } = new JSDOM('<!DOCTYPE html>');
 
         global.document = window.document;
         global.HTMLElement = window.HTMLElement;
@@ -28,7 +28,7 @@ describe('Templator', () => {
     });
 
     it('checking attributes', () => {
-        const template = `<div id="{{ id }}" class="classname {{ customClassName }}" data-id="11">11</div>`;
+        const template = '<div id="{{ id }}" class="classname {{ customClassName }}" data-id="11">11</div>';
 
         const node = templator.compile(template, { id: 'my-id', customClassName: 'my-classname' }) as HTMLElement;
 
@@ -38,9 +38,9 @@ describe('Templator', () => {
     });
 
     it('checking custom textContent', () => {
-        const template = `<div>{{ content }}</div>`;
+        const template = '<div>{{ content }}</div>';
 
-        expect((templator.compile(template, { content: 'custom content'}) as HTMLElement).textContent).to.equal('custom content');
+        expect((templator.compile(template, { content: 'custom content' }) as HTMLElement).textContent).to.equal('custom content');
     });
 
     it('checking self-closed element', () => {
@@ -86,10 +86,56 @@ describe('Templator', () => {
             render() {
                 return node;
             }
-        }
+        };
 
         const template = '<div>{{ content }}</div>';
 
         expect((templator.compile(template, { content: component }) as HTMLElement).outerHTML).to.equal('<div><p>content</p></div>');
+    });
+
+    describe('checking if', () => {
+        it('checking when true', () => {
+            const template1 = `
+                <div>
+                    $if[[ (( string )), (( <div>it's true!</div> )) ]]
+                </div>
+            `;
+
+            expect((templator.compile(template1) as HTMLElement).outerHTML).to.equal("<div><div>it's true!</div></div>");
+
+            const template2 = `
+                <div>
+                    $if[[ (( {{ condition }} )), (( <div>it's true too!</div> )) ]]
+                </div>
+            `;
+
+            expect((templator.compile(template2, { condition: 36 > 35 }) as HTMLElement).outerHTML).to.equal("<div><div>it's true too!</div></div>");
+        });
+
+        it('checking when false', () => {
+            const template1 = `
+                <div>
+                    $if[[ (( {{ condition }} )), (( <div>it's true!</div> )) ]]
+                </div>
+            `;
+
+            expect((templator.compile(template1) as HTMLElement).outerHTML).to.equal('<div></div>');
+
+            const template2 = `
+                <div>
+                    $if[[ (( {{ condition }} )), (( <div>it's true!</div> )), (( <div>it's false!</div> )) ]]
+                </div>
+            `;
+
+            expect((templator.compile(template2, { condition: 36 > 37 }) as HTMLElement).outerHTML).to.equal("<div><div>it's false!</div></div>");
+
+            const template3 = `
+                <div>
+                    $if[[ (( {{ condition }} )), (( <div>it's true!</div> )), (( <div>it's false too!</div> )) ]]
+                </div>
+            `;
+
+            expect((templator.compile(template3) as HTMLElement).outerHTML).to.equal("<div><div>it's false too!</div></div>");
+        });
     });
 });

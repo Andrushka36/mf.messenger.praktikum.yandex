@@ -9,4 +9,4 @@ export const render = (selector: string, component: Component<any>) => {
     }
 
     return root;
-}
+};

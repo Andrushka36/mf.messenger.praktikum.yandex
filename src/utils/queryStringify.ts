@@ -10,14 +10,15 @@ export const queryStringify = (data?: Record<string, unknown>): string => {
             }
             return Object
                 .entries(value as object)
-                .map(([p, v]) => transform(v, `${prop}[${p}]`)).join('&');
+                .map(([p, v]) => transform(v, `${prop}[${p}]`))
+                .join('&');
         } else {
             return prop + '=' + value;
         }
-    }
+    };
 
     return '?' + Object
         .entries(data)
         .map(([prop, value]) => transform(value, prop))
         .join('&');
-}
+};

@@ -7,7 +7,7 @@ let form: HTMLFormElement;
 
 describe('Form', () => {
     before(() => {
-        const window = new JSDOM(`<!DOCTYPE html>`).window;
+        const { window } = new JSDOM('<!DOCTYPE html>');
 
         // @ts-ignore
         global.window = window;

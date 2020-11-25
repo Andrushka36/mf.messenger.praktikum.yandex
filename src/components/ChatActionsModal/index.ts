@@ -17,7 +17,7 @@ export class ChatActionsModal extends Component<IChatActionsModal> {
 
         return templator.compile(template, {
             content,
-            className: `${this.getXClassName(x)} ${this.getYClassName(y)}`
+            className: `${this.getXClassName(x)} ${this.getYClassName(y)}`,
         });
     }
 
@@ -30,7 +30,7 @@ export class ChatActionsModal extends Component<IChatActionsModal> {
     }
 
     componentDidUpdate() {
-        const modal = this.getContent();
+        const modal = this.element;
 
         if (modal instanceof HTMLElement) {
             setTimeout(() => {

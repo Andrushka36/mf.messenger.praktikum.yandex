@@ -35,7 +35,6 @@ export class Form<T> {
                 this.validate(validator);
 
                 this.showErrors();
-
             });
 
             input?.addEventListener('blur', () => {
@@ -105,7 +104,7 @@ export class Form<T> {
             data = {
                 ...data,
                 [name]: value,
-            }
+            };
         });
 
         this.errors = cleanObject(
@@ -126,7 +125,7 @@ export class Form<T> {
             }
         }
 
-        let data: Partial<{ [key in keyof T]: any }> = {};
+        const data: Partial<{ [key in keyof T]: any }> = {};
 
         this.formData.forEach((value, key) => {
             data[key as keyof T] = value;

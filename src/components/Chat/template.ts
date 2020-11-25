@@ -1,8 +1,7 @@
 export const template = `
     <main class="chat">
-        {{ chatHeader }}
+        {{ header }}
         {{ messages }}
         {{ messageForm }}
-        {{ deleteModal }}
     </main>
 `;

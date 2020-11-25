@@ -9,7 +9,7 @@ export type HTTPTransportOptionsType = {
     /**
      * Тело запроса
      */
-    body?: Record<string, unknown>;
+    body?: Record<string, unknown> | FormData;
 
     /**
      * Заголовки запроса

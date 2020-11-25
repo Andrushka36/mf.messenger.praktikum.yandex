@@ -23,7 +23,7 @@ describe('EventBus', () => {
 
         eventBus.on('bang', fn1);
         eventBus.on('bang', fn2);
-        eventBus.off('bang', fn1)
+        eventBus.off('bang', fn1);
 
         expect(eventBus.getListeners()).to.deep.equal({ bang: [fn2] });
     });

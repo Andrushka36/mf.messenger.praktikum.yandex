@@ -1,41 +1,47 @@
 import { expect } from 'chai';
 import { JSDOM } from 'jsdom';
-import { fake } from 'sinon';
+import { fake, spy } from 'sinon';
 import { Component } from './index';
 
 let node: HTMLElement;
 
 describe('Component', () => {
     before(() => {
-        const window = new JSDOM(`<!DOCTYPE html>`).window;
+        const { window } = new JSDOM('<!DOCTYPE html>');
 
         global.document = window.document;
         global.HTMLElement = window.HTMLElement;
 
         node = document.createElement('div');
         node.setAttribute('id', 'node');
+
+        global.queueMicrotask = fake((fn: Function) => fn());
     });
 
     it('checking render and getContent', () => {
-       const component = new class MyComponent extends Component {
-           render() {
-               return node;
-           }
-       };
+        const component = new class MyComponent extends Component {
+            render() {
+                return node;
+            }
+        };
 
-       expect(component.element).to.equal(node);
+        expect(component.element).to.equal(node);
 
-       expect(component.getContent()).to.equal(node);
+        expect(component.getContent()).to.equal(node);
     });
 
     it('checking componentDidMount', () => {
         const fakeFn = fake();
 
-        new class MyComponent extends Component {
+        const component = new class MyComponent extends Component {
             componentDidMount() {
                 fakeFn();
             };
         };
+
+        expect(fakeFn.callCount).to.equal(0);
+
+        component.getContent();
 
         expect(fakeFn.callCount).to.equal(1);
     });
@@ -55,6 +61,8 @@ describe('Component', () => {
         };
 
         expect(fakeRender.callCount).to.equal(1);
+
+        component.getContent();
 
         component.forceUpdate();
 
@@ -89,7 +97,7 @@ describe('Component', () => {
             shouldComponentUpdate(): boolean {
                 return false;
             }
-        }({ prop: 1 })
+        }({ prop: 1 });
 
         component.setProps({ prop: 2 });
 
@@ -128,9 +136,42 @@ describe('Component', () => {
                 fn('render');
                 return null;
             }
-        }
+        };
 
         expect(fn.firstCall.firstArg).to.be.equal('prerender');
         expect(fn.lastCall.firstArg).to.be.equal('render');
+    });
+
+    it('checking unmount', () => {
+        const component = new class MyComponent extends Component {
+            render() {
+                return node;
+            }
+        };
+
+        const spyRemove = spy(node, 'remove');
+
+        component.unmount();
+        expect(spyRemove.callCount).to.equal(1);
+
+        spyRemove.restore();
+    });
+
+    it('checking componentWillUnmount', () => {
+        const fakeFn = fake();
+
+        const component = new class MyComponent extends Component {
+            render() {
+                return node;
+            }
+
+            componentWillUnmount() {
+                fakeFn();
+            }
+        };
+
+        component.unmount();
+
+        expect(fakeFn.callCount).to.equal(1);
     });
 });

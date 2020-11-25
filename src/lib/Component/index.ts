@@ -1,4 +1,5 @@
 import { EventBus } from '../EventBus';
+import { isEqual } from '../../utils/isEqual';
 
 export class Component<T extends {} = any> {
     constructor(props: T = {} as T) {
@@ -13,11 +14,12 @@ export class Component<T extends {} = any> {
     }
 
     static EVENTS = {
-        INIT: "init",
-        FLOW_CDM: "flow:component-did-mount",
-        FLOW_RENDER: "flow:render",
-        FLOW_SCDU: "flow:should-component-did-update",
-        FLOW_CDU: "flow:component-did-update",
+        INIT: 'init',
+        FLOW_CDM: 'flow:component-did-mount',
+        FLOW_RENDER: 'flow:render',
+        FLOW_SCU: 'flow:should-component-update',
+        FLOW_CDU: 'flow:component-did-update',
+        FLOW_CWU: 'flow:component-will-unmount',
     };
 
     private _element: SVGElement | DocumentFragment | HTMLElement | Text | null = null;
@@ -32,8 +34,9 @@ export class Component<T extends {} = any> {
         eventBus.on(Component.EVENTS.INIT, this.init.bind(this));
         eventBus.on(Component.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
         eventBus.on(Component.EVENTS.FLOW_RENDER, this._render.bind(this));
-        eventBus.on(Component.EVENTS.FLOW_SCDU, this._shouldComponentDidUpdate.bind(this));
+        eventBus.on(Component.EVENTS.FLOW_SCU, this._shouldComponentDidUpdate.bind(this));
         eventBus.on(Component.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+        eventBus.on(Component.EVENTS.FLOW_CWU, this._componentWillUnmount.bind(this));
     }
 
     private init() {
@@ -57,7 +60,7 @@ export class Component<T extends {} = any> {
     }
 
     shouldComponentUpdate(oldProps: T, newProps: T): boolean {
-        return oldProps !== newProps;
+        return !isEqual(oldProps, newProps);
     }
 
     private _componentDidUpdate() {
@@ -65,7 +68,6 @@ export class Component<T extends {} = any> {
     }
 
     public componentDidUpdate() {
-
     }
 
     public setProps = (nextProps: Partial<T>) => {
@@ -88,10 +90,7 @@ export class Component<T extends {} = any> {
             }
         }
 
-        if (!this._mounted) {
-            this.eventBus().emit(Component.EVENTS.FLOW_CDM);
-            this._mounted = true;
-        } else {
+        if (this._mounted) {
             this.eventBus().emit(Component.EVENTS.FLOW_CDU);
         }
     }
@@ -104,22 +103,28 @@ export class Component<T extends {} = any> {
         return this._element;
     }
 
-    public getContent(): SVGElement | DocumentFragment| HTMLElement | Text | null {
+    public getContent = (): SVGElement | DocumentFragment| HTMLElement | Text | null => {
+        // эмитим событие CDM после того как будет вызван метод getContent,
+        // который вызывается внутри функции render
+        // эмитим в микротаске, чтоб оно заэмитилось только после возврата элемента
+        queueMicrotask(() => {
+            this._mounted = true;
+            this.eventBus().emit(Component.EVENTS.FLOW_CDM);
+        });
         return this.element;
     }
 
     private _makePropsProxy(props: T) {
         return new Proxy<T>(props, {
             set: (target: T, prop: string, value: string | number | boolean | Function) => {
-
                 const oldProps = { ...this.props };
 
                 (target as unknown as { [key: string]: string | number | boolean | Function })[prop] = value;
 
-                this.eventBus().emit(Component.EVENTS.FLOW_SCDU, oldProps, target);
+                this.eventBus().emit(Component.EVENTS.FLOW_SCU, oldProps, target);
 
                 return true;
-            }
+            },
         });
     }
 
@@ -157,5 +162,20 @@ export class Component<T extends {} = any> {
 
     public prerender() {
 
+    }
+
+    public componentWillUnmount() {
+
+    }
+
+    private _componentWillUnmount() {
+        this.componentWillUnmount();
+    }
+
+    public unmount() {
+        if (this._element instanceof HTMLElement) {
+            this.eventBus().emit(Component.EVENTS.FLOW_CWU);
+            this._element.remove();
+        }
     }
 }

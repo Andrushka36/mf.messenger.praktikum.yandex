@@ -10,17 +10,19 @@ describe('Route', () => {
     let node: HTMLElement;
 
     before(() => {
-        const window = new JSDOM(`<!DOCTYPE html>`).window;
+        const { window } = new JSDOM('<!DOCTYPE html>');
 
         global.document = window.document;
         global.HTMLElement = window.HTMLElement;
 
         node = document.createElement('div');
-        node.setAttribute('id', 'node')
+        node.setAttribute('id', 'node');
 
-        component = {
-            element: node,
-        } as unknown as Component;
+        component = new class MyComponent extends Component {
+            render() {
+                return node;
+            }
+        };
     });
 
     it('checking render block', () => {
@@ -38,12 +40,24 @@ describe('Route', () => {
         document.title = '';
     });
 
-    it('checking match', () => {
-        const route = new Route('/test', component, 'Заголовок', '#root');
+    describe('checking match', () => {
+        it('checking default path', () => {
+            const route = new Route('/test', component, 'Заголовок', '#root');
 
-        expect(route.match('/test1')).to.be.false;
+            expect(route.match('/test1')).to.be.false;
 
-        expect(route.match('/test')).to.be.true;
+            expect(route.match('/test')).to.be.true;
+        });
+
+        it('checking path with variable', () => {
+            const route = new Route('/test/:testId', component, 'Заголовок', '#root');
+
+            expect(route.match('/test')).to.be.false;
+
+            expect(route.match('/test/sss')).to.be.true;
+
+            expect(route.match('/test/sss/zzz')).to.be.false;
+        });
     });
 
     it('checking leave', () => {

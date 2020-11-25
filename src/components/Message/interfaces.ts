@@ -1,4 +1,5 @@
 import { Component } from '../../lib/Component';
+import { MessageStatus, MessageType } from '../../models/chats';
 
 export interface IMessage {
     /**
@@ -14,7 +15,7 @@ export interface IMessage {
     /**
      * Статус исходящего сообщения
      */
-    status?: 'read' | 'sent';
+    status?: MessageStatus;
 
     /**
      * Время сообщения
@@ -24,5 +25,15 @@ export interface IMessage {
     /**
      * Тип сообщения
      */
-    type: 'incoming' | 'outgoing';
+    type: MessageType;
+
+    /**
+     * Отображаемое имя пользователя
+     */
+    user: string;
+
+    /**
+     * Идентификатор пользователя
+     */
+    userId: number;
 }

@@ -1,0 +1,265 @@
+@import "../../theme/variables.sass"
+
+.hidden
+  display: none
+
+.chat
+  width: 100%
+  padding-left: 20px
+  padding-right: 20px
+  color: $text-primary-color
+  display: flex
+  flex-direction: column
+
+.chat-header
+  padding-top: 10px
+  padding-bottom: 10px
+  border-bottom: 1px solid $border-color
+
+.chat-row
+  display: grid
+  grid-template-columns: 34px 1fr 28px
+  gap: 10px
+  align-items: center
+  position: relative
+
+.chat-header__avatar
+  border-radius: 50%
+
+.chat-header__title
+  font-size: $header-font-size
+  font-weight: 600
+
+.chat-header__actions
+  position: relative
+  width: 25px
+  height: 25px
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  align-items: center
+  padding-top: 5px
+  padding-bottom: 5px
+  border-radius: 50%
+  transition: 0.3s
+
+  &:hover
+    color: $blue-1
+    background-color: $gray-6
+
+.chat-modal
+  position: absolute
+  background-color: $white-1
+  box-shadow: $box-shadow
+  border-radius: 12px
+  padding-top: 8px
+  padding-bottom: 8px
+  z-index: 100
+
+.chat-modal_bottom
+  top: calc(100% + 22.5px)
+
+.chat-modal_right
+  right: -10px
+
+.chat-modal_top
+  bottom: calc(100% + 22.5px)
+
+.chat-modal_left
+  left: -10px
+
+.chat-actions__item
+  display: flex
+  align-items: center
+  width: 100%
+  padding: 7px 15px
+  transition: 0.3s
+
+  &:hover
+    background-color: $blue-3
+
+  &:not(:last-child)
+    margin-bottom: 8px
+
+  svg
+    width: 22px
+    height: 22px
+    color: $blue-1
+
+.chat-actions__item-label
+  margin-left: 15px
+
+.chat__content
+  flex-grow: 1
+  display: flex
+  flex-direction: column
+  overflow-y: auto
+  position: relative
+  margin-right: -6px
+  padding-right: 6px
+
+
+.chat__messages
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  flex-grow: 1
+  padding-top: 20px
+  padding-bottom: 20px
+  justify-content: flex-end
+
+.messages-date
+  color: $text-secondary-color
+  align-self: center
+  margin-top: 30px
+  margin-bottom: 30px
+
+.message
+  padding: 11px
+  border-radius: 12px
+  line-height: 15px
+  max-width: 400px
+  position: relative
+  margin-bottom: 10px
+
+.message__user
+  display: block
+  font-weight: 600
+  margin-bottom: 10px
+
+.message__content
+  &:not(:last-of-type)
+    margin-bottom: 10px
+
+.message__time-holder
+  display: inline-block
+  width: 35px
+
+.message__time
+  position: absolute
+  bottom: 8px
+  right: 11px
+  font-size: $extra-small-font-size
+  color: $text-secondary-color
+  display: grid
+  grid-template-columns: min-content min-content
+  align-items: center
+
+  time:not(:first-child)
+    margin-left: 3px
+
+.message_incoming
+  background-color: $gray-7
+  border-top-left-radius: unset
+
+.message_attach
+  background-color: transparent
+  border: 1px solid $gray-3
+  padding-bottom: 33px
+
+  .message__time
+    background-color: $gray-2
+    color: $white-1
+    line-height: 15px
+    padding-left: 7px
+    padding-right: 7px
+    border-radius: 30px
+
+.message_outgoing
+  background-color: $blue-3
+  align-self: flex-end
+  border-bottom-right-radius: unset
+
+  .message__time-holder
+    width: 45px
+
+  &:not(.message_attach) .message__time
+    color: $blue-1
+
+.message__icon
+  width: 9px
+  height: 4px
+  color: $blue-1
+
+.message-form
+  padding-top: 10px
+  padding-bottom: 10px
+  border-top: 1px solid $border-color
+
+.message-form__attach
+  color: $text-secondary-color
+  height: 32px
+  border-radius: 50%
+  transition: 0.3s
+
+  &:hover
+    color: $blue-1
+
+.message-form__input
+  background-color: $chat-input-bg-color
+  padding: $chat-input-padding 20px
+  border-radius: 30px
+
+.message-form__submit
+  border-radius: 50%
+  background-color: $blue-1
+  height: 28px
+  padding-top: 8px
+  padding-bottom: 8px
+  color: $white-1
+  transition: 0.3s
+
+  &:hover
+    background-color: $blue-2
+
+.modal
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  z-index: 200
+  background-color: $overlay-color
+  display: none
+  align-items: center
+  justify-content: center
+
+.modal__content
+  background-color: $white-1
+  padding: 30px 40px
+  border-radius: 12px
+  width: 400px
+
+.modal__title
+  font-size: $header-font-size
+  text-align: center
+  color: $text-primary-color
+
+.modal__form
+  padding-top: 30px
+
+.modal__buttons
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 10px
+
+.modal__button
+  font-size: $normal-font-size
+  padding-top: 12px
+  padding-bottom: 12px
+  border-radius: 8px
+  transition: 0.3s
+
+.modal__button_confirm
+  color: $white-1
+  background-color: $red-1
+
+  &:hover
+    background-color: $red-2
+
+.modal__button-cancel
+  color: $text-primary-color
+  background-color: $gray-3
+
+  &:hover
+    background-color: $gray-8

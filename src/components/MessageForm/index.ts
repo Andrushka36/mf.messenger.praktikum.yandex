@@ -9,8 +9,13 @@ import { ChatActionsItem } from '../ChatActionsItem';
 import { PhotoIcon } from '../../assets/PhotoIcon';
 import { FileIcon } from '../../assets/FileIcon';
 import { LocationIcon } from '../../assets/LocationIcon';
+import { IMessageForm } from './types';
 
-export class MessageForm extends Component<{}> {
+export class MessageForm extends Component<IMessageForm> {
+    constructor(props: IMessageForm) {
+        super(props);
+    }
+
     public attachFormMessageModal!: ChatActionsModal;
 
     public buttonFormMessageAttach!: ChatActionsButton;
@@ -42,10 +47,9 @@ export class MessageForm extends Component<{}> {
             y: 'top',
         });
 
-
         const attachFormMessageModalToggle = () => {
             this.attachFormMessageModal.visibilityToggle();
-        }
+        };
 
         this.buttonFormMessageAttach = new ChatActionsButton({
             className: 'message-form__attach',
@@ -66,11 +70,30 @@ export class MessageForm extends Component<{}> {
             },
             onSubmit: (e: Event) => {
                 e.preventDefault();
-                if (this.message !== '') {
-                    console.log(`message: ${this.message}`);
+                const { onSubmit } = this.props;
+
+                if (this.message !== '' && onSubmit !== undefined) {
+                    onSubmit(this.message);
+                    this.message = '';
                     this.forceUpdate();
                 }
             },
+            value: this.message,
         });
+    }
+
+    // TODO: Удалить после написания Virtual DOM
+    componentDidUpdate() {
+        if (this.element instanceof HTMLElement) {
+            const input = this.element.querySelector<HTMLInputElement>('[name="message"]');
+
+            if (input instanceof HTMLInputElement && !(document.activeElement instanceof HTMLInputElement)) {
+                input.focus();
+
+                if (this.message !== '') {
+                    input.selectionStart = this.message.length;
+                }
+            }
+        }
     }
 }

@@ -1,0 +1,62 @@
+@import "../../theme/variables.sass"
+
+.login-form
+  width: 340px
+  height: 460px
+  font-size: $normal-font-size
+  padding: 70px 30px 30px
+  border-radius: 12px
+  box-shadow: $box-shadow
+  display: flex
+  flex-direction: column
+
+.login-form_long
+  height: 680px
+
+.login-form__title
+  font-size: $header-font-size
+  text-align: center
+  margin-bottom: 40px
+
+.login-form__row
+  display: block
+  position: relative
+  padding-top: 15px
+  padding-bottom: 5px
+  margin-bottom: 16px
+  border-bottom: 1px solid $blue-1
+
+  .form-error
+    bottom: - $extra2-small-font-size - 6px
+
+.login-form__label
+  position: absolute
+  top: 17px
+  left: 0
+  pointer-events: none
+  color: $text-secondary-color
+  transition: 0.3s
+
+  .login-form__input:focus ~ &,
+  .login-form__input:not(:invalid) ~ &
+    font-size: $extra-small-font-size
+    top: 0
+
+.login-form__submit
+  color: $white-1
+  text-align: center
+  padding-top: 12px
+  padding-bottom: 12px
+  background-color: $blue-1
+  border-radius: 8px
+  width: 100%
+  margin-top: auto
+  margin-bottom: 14px
+  font-size: inherit
+  transition: 0.3s
+
+  &:hover
+    background-color: $blue-2
+
+.login-form__link
+  align-self: center

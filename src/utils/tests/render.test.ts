@@ -5,7 +5,7 @@ import { Component } from '../../lib/Component';
 
 describe('render', () => {
     before(() => {
-        const window = new JSDOM(`<!DOCTYPE html><div id="app"></div>`).window;
+        const { window } = new JSDOM('<!DOCTYPE html><div id="app"></div>');
 
         global.document = window.document;
     });
@@ -17,11 +17,11 @@ describe('render', () => {
         const mockComponent = {
             getContent() {
                 return node;
-            }
-        }
+            },
+        };
 
-        render( '#app', mockComponent as unknown as Component);
+        render('#app', mockComponent as unknown as Component);
 
-        expect(document.querySelector("#app")?.children[0]).to.equal(node);
+        expect(document.querySelector('#app')?.children[0]).to.equal(node);
     });
 });

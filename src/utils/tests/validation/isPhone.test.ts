@@ -28,7 +28,7 @@ describe('isPhone', () => {
         });
 
         it('checking email with only digits', () => {
-            const phone= '81234567890';
+            const phone = '81234567890';
 
             expect(isPhone(phone)).to.be.true;
         });
@@ -48,7 +48,7 @@ describe('isPhone', () => {
         });
 
         it('checking email with only digits', () => {
-            const phone= '+71234567890';
+            const phone = '+71234567890';
 
             expect(isPhone(phone)).to.be.true;
         });
@@ -59,7 +59,6 @@ describe('isPhone', () => {
 
         expect(isPhone(phone)).to.be.false;
     });
-
 
     it('checking phone with letter', () => {
         const phone = '+7 s123 456 78 90';

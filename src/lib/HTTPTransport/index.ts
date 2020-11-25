@@ -1,4 +1,5 @@
 import { queryStringify } from '../../utils/queryStringify';
+import { getApiPath } from '../../utils/getApiPath';
 import { HTTPMethods, HTTPRequestOptionsType, HTTPTransportOptionsType } from './types';
 
 export class HTTPTransport {
@@ -14,7 +15,7 @@ export class HTTPTransport {
 
     get = (url: string, options: HTTPTransportOptionsType = {}) => {
         const { body } = options;
-        const newUrl = url + queryStringify(body);
+        const newUrl = url + queryStringify(!(body instanceof FormData) ? body : undefined);
         return this.request(newUrl, { ...options, method: HTTPMethods.GET }, options.timeout);
     };
 
@@ -35,6 +36,9 @@ export class HTTPTransport {
 
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
+
+            xhr.withCredentials = true;
+
             xhr.open(method, this.getDomain() + url);
 
             xhr.onload = function() {
@@ -57,6 +61,9 @@ export class HTTPTransport {
             xhr.onerror = reject;
             xhr.ontimeout = reject;
             xhr.timeout = timeout;
+            if (!(body instanceof FormData)) {
+                xhr.setRequestHeader('content-type', 'application/json');
+            }
             Object.entries(headers).forEach(([key, value]) => {
                 xhr.setRequestHeader(key, value);
             });
@@ -64,10 +71,15 @@ export class HTTPTransport {
             if (method === HTTPMethods.GET || !body) {
                 xhr.send();
             } else {
-                xhr.send(JSON.stringify(body));
+                xhr.send(body instanceof FormData ? body : JSON.stringify(body));
             }
-        })
+        });
     };
 }
 
 export const httpTransport = new HTTPTransport();
+
+httpTransport.setDomain(getApiPath({
+    host: process.env.HOST,
+    path: process.env.PATH,
+}));

@@ -3,7 +3,7 @@ import {
     AllowedComponent,
     AllowedComponentConstructor,
     TemplatorTreeType,
-    TemplatorContextType
+    TemplatorContextType,
 } from './types';
 
 class Templator {
@@ -15,7 +15,23 @@ class Templator {
         onSubmit: 'submit',
     }
 
-    public SVG_TAGS = ['svg', 'circle', 'path', 'stroke', 'rect', 'line'];
+    public SVG_TAGS = ['svg', 'circle', 'path', 'stroke', 'rect', 'line', 'g'];
+
+    public _if(template: string, ctx: TemplatorContextType): SVGElement | DocumentFragment | HTMLElement | Text {
+        const results = template.match(/(\(\(.*?\)\))/ig) || [];
+
+        const variable = (results[0].match(/{{ (\w+) }}/) || [])[1];
+
+        const compileTemplate = (str: string) => {
+            return templator.compile(str.replace(/^(\(\([ ]?)|([ ]?\)\))$/g, ''), ctx);
+        };
+
+        if (variable === undefined || ctx[variable]) {
+            return compileTemplate(results[1]);
+        } else {
+            return results[2] ? compileTemplate(results[2]) : document.createDocumentFragment();
+        }
+    }
 
     private _setAttributes<T>(node: HTMLElement | SVGElement, attrs: RegExpMatchArray, ctx: TemplatorContextType) {
         const regexp = /(?<prop>[a-zA-Z0-9-]+)(="(?<value>.*?)")?/;
@@ -28,7 +44,7 @@ class Templator {
                 if (typeof ctx[match[1]] === 'function') {
                     val = ctx[match[1]] as string | number | boolean | Function | undefined | T;
                 } else {
-                    const re = new RegExp(`{{ ${match[1]} }}`)
+                    const re = new RegExp(`{{ ${match[1]} }}`);
                     val = val?.replace(re, ctx[match[1]] as string || '');
                 }
             }
@@ -41,7 +57,7 @@ class Templator {
             } else if (prop === 'class' && val !== undefined && node instanceof HTMLElement) {
                 node.className = String(val);
             } else if (value === undefined) {
-                node.setAttribute(prop, "true");
+                node.setAttribute(prop, 'true');
             } else {
                 node.setAttribute(prop, String(val));
             }
@@ -50,6 +66,10 @@ class Templator {
 
     private _createNode<T extends AllowedComponent>(element: TemplatorTreeType, ctx: TemplatorContextType): SVGElement | DocumentFragment | HTMLElement | Text {
         if (typeof element === 'string') {
+            if (element.indexOf('$if') === 0) {
+                return this._if(element, ctx);
+            }
+
             let newItem = element;
             const vars = (element
                 .match(/{{ (\w+) }}/g) || [])
@@ -121,6 +141,10 @@ class Templator {
 
         const firstElement = elements.shift() as string;
 
+        if (firstElement[0] === '$') {
+            return firstElement;
+        }
+
         if (isTag(firstElement)) {
             const tag = parseFullTag(firstElement);
             const children = [];
@@ -150,7 +174,7 @@ class Templator {
 
     private _parseTemplate(str: string) {
         const row = str.replace(/([\r\n]+)/g, '').replace(/ {2,}/g, '');
-        const elements = row.match(/(<.*?>)|([^<]+)/ig) as string[];
+        const elements = row.match(/(\$if\[\[.*?]])|(<.*?>)|([^<]+)/ig) as string[];
 
         return elements.filter(item => item !== '');
     }

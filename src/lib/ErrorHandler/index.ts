@@ -1,12 +1,9 @@
-import { Component } from '../Component';
-import { router } from '../Router';
-
 export class ErrorHandler {
     static __instance: ErrorHandler;
 
-    public codes: number[] = [];
+    public callbacks: Record<number, Function> = {};
 
-    public defaultCode: number | null = null;
+    public fallback: Function = () => void 0;
 
     constructor() {
         if (ErrorHandler.__instance) {
@@ -16,35 +13,23 @@ export class ErrorHandler {
         ErrorHandler.__instance = this;
     }
 
-    public getPathname(code: number) {
-        return `/${code}`;
-    }
-
-    public addRoute(code: number, block: Component) {
-        router.use(this.getPathname(code), block, `Ошибка ${code}`);
-    }
-
-    public use(code: number, block: Component) {
-        this.addRoute(code, block);
-
-        this.codes.push(code);
+    use(code: number, callback: Function) {
+        this.callbacks[code] = callback;
 
         return this;
     }
 
-    public useFallback(code: number, block: Component) {
-        this.addRoute(code, block);
-
-        this.defaultCode = code;
+    public useFallback(callback: Function) {
+        this.fallback = callback;
 
         return this;
     }
 
     public handle(code: number) {
-        if (this.codes.includes(code)) {
-            router.go(this.getPathname(code));
-        } else if (this.defaultCode) {
-            router.go(this.getPathname(this.defaultCode));
+        if (code in this.callbacks) {
+            this.callbacks[code]();
+        } else {
+            this.fallback();
         }
     }
 }

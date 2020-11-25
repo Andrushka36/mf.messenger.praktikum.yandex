@@ -12,7 +12,7 @@ export const template = `
             <h1 class="visually-hidden">
                 {{ pageTitle }}
             </h1>
-            <img src="{{ avatarSrc }}" alt="Аватар пользователя {{ displayName }}" width="131" height="131" />
+            <img src="{{ avatarSrc }}" alt="Аватар пользователя {{ displayName }}" width="131" height="131" class="profile__avatar" />
             <div class="profile__title">
                 {{ displayName }}
             </div>

@@ -1,38 +1,36 @@
-import { Component } from '../../lib/Component';
-
 export interface IChatItem {
-    /**
-     * Альтернативный текст для аватарки
-     */
-    avatarAlt: string;
-
     /**
      * Путь к аватарке
      */
-    avatarSrc: string;
+    avatar: string
 
     /**
-     * Текст сообщения в чате
+     * Идентификатор чата
      */
-    chatMessage: string | Component;
+    id: number;
+
+    /**
+     * Определяет, является ли открытым текущий чат
+     */
+    open: boolean;
 
     /**
      * Название чата
      */
-    chatName: string;
+    title: string;
 
     /**
-     * Путь к странице чата
+     * Последнее входящее сообщение
      */
-    chatUrl: string;
+    incomingMessage?: string;
 
     /**
-     * Дата/время сообщения в чате
+     * Количество новых сообщений в чате
      */
-    date: string;
+    newMessage?: number;
 
     /**
-     * Компонент с количеством новых сообщений в чате
+     * Последнее исходящее сообщение
      */
-    newMessage?: Component;
+    outgoingMessage?: string;
 }

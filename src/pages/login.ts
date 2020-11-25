@@ -4,19 +4,22 @@ import { SignInType } from '../models/signIn';
 import { isShortPassword } from '../utils/validation/isShortPassword';
 import { signInDTO } from '../api/signInDTO';
 import { errorHandler } from '../lib/ErrorHandler';
+import { router } from '../lib/Router';
+import { authorization } from '../lib/Authorization';
+import { Err } from '../components/Error';
 
 const loginElement = new LoginFormRow({
     label: 'Логин',
     name: 'login',
     type: 'text',
-    value: 'username',
+    value: '',
 });
 
 const passwordElement = new LoginFormRow({
     label: 'Пароль',
     name: 'password',
     type: 'password',
-    value: 'password',
+    value: '',
 });
 
 export const login = new LoginForm<SignInType>({
@@ -30,7 +33,30 @@ export const login = new LoginForm<SignInType>({
     onSubmit: (values) => {
         signInDTO
             .create(values)
-            .catch(({ status }) => {
+            .then(() => authorization.check())
+            .then(() => {
+                const { pathname } = window.location;
+                if (pathname === '/login' || pathname === '/login/') {
+                    router.go('/');
+                } else {
+                    router.go(pathname);
+                }
+            })
+            .catch(({ status, response  }) => {
+                try {
+                    const { reason } = JSON.parse(response);
+
+                    if (reason === 'Login or password is incorrect') {
+                        router.renderComponent(new Err({
+                            code: status,
+                            text: 'Логин или пароль введены неправильно',
+                        }));
+                    }
+                    return;
+                }
+                catch (e) {
+
+                }
                 errorHandler.handle(status);
             });
     },
@@ -45,6 +71,6 @@ export const login = new LoginForm<SignInType>({
             if (isShortPassword(password)) {
                 return 'Минимальная длина пароля - 8 символов';
             }
-        }
-    }
+        },
+    },
 });

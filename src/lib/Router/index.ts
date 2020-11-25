@@ -1,5 +1,7 @@
 import { Route } from './Route';
 import { Component } from '../Component';
+import { Authorization } from '../Authorization';
+import { IRouteProps } from './types';
 
 export class Router {
     static __instance: Router;
@@ -11,6 +13,12 @@ export class Router {
     private _currentRoute: Route | null = null;
 
     public fallback: Route | null = null;
+
+    private _authorization: Authorization | null = null;
+
+    public loader: Route | null = null;
+
+    public guestPage: Route | null = null;
 
     constructor(
         private _selector: string,
@@ -34,15 +42,15 @@ export class Router {
         });
     }
 
-    use(pathname: string, block: Component, title: string) {
-        const route = new Route(pathname, block, title, this._selector);
+    use(pathname: string, block: Component, title: string, props?: IRouteProps) {
+        const route = new Route(pathname, block, title, this._selector, props);
 
         this.routes.push(route);
 
         return this;
     }
 
-    start() {
+    private _start() {
         window.onpopstate = ((event: any) => {
             this._onRoute(event.currentTarget.location.pathname);
         });
@@ -50,9 +58,35 @@ export class Router {
         this._onRoute(window.location.pathname);
     }
 
-    _onRoute(pathname: string) {
-        const route = this.getRoute(pathname) || this.fallback;
+    start() {
+        if (this._authorization) {
+            this.loader?.render();
 
+            this._authorization
+                .check()
+                .finally(() => {
+                    this.loader?.leave();
+                    this._start();
+                });
+        } else {
+            this._start();
+        }
+    }
+
+    _onRoute(pathname: string) {
+        const guestPage = this._authorization && !this._authorization.isAuthorized() && this.guestPage;
+        const route = this.getRoute(pathname) || guestPage || this.fallback;
+
+        this.renderRoute(route);
+    }
+
+    renderComponent(component: Component) {
+        const route = new Route('', component, '', this._selector);
+
+        this.renderRoute(route);
+    }
+
+    renderRoute(route: Route | null) {
         if (this._currentRoute) {
             this._currentRoute.leave();
         }
@@ -79,13 +113,42 @@ export class Router {
     }
 
     getRoute(pathname: string) {
-        return this.routes.find(route => route.match(pathname));
+        return this.routes.find(route => {
+            const isPrivateAllowed = this._authorization?.isAuthorized() && route.isPrivate();
+            const isPublicAllowed = !this._authorization?.isAuthorized() && (route.isOnlyPublic() || !route.isPrivate()) || this._authorization?.isAuthorized() && !route.isOnlyPublic() && !route.isPrivate();
+            return route.match(pathname) && (!this._authorization || isPrivateAllowed || isPublicAllowed);
+        });
     }
 
     useFallback(pathname: string, block: Component, title: string) {
         this.fallback = new Route(pathname, block, title, this._selector);
 
         return this;
+    }
+
+    useAuthorization(authorization: Authorization) {
+        this._authorization = authorization;
+
+        return this;
+    }
+
+    useLoader(block: Component) {
+        this.loader = new Route('', block, 'Загрузка', this._selector);
+
+        return this;
+    }
+
+    useGuestPage(pathname: string, block: Component, title: string) {
+        this.guestPage = new Route(pathname, block, title, this._selector, { onlyPublic: true });
+
+        this.routes.push(this.guestPage);
+
+        return this;
+    }
+
+    getCurrentParam(): string | undefined {
+        const match = window.location.pathname.match(this._currentRoute?.getRegExpPattern() || '');
+        return match && typeof match[1] === 'string' ? match[1] : undefined;
     }
 }
 

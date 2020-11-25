@@ -12,4 +12,4 @@ export const cleanObject = (obj: { [key: string]: string | undefined | null }) =
     }
 
     return res;
-}
+};

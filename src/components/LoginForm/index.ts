@@ -3,6 +3,7 @@ import { templator } from '../../lib/Templator';
 import { template } from './template';
 import { Form } from '../../lib/Form';
 import { ILoginForm } from './interfaces';
+import './styles.sass';
 
 export class LoginForm<T> extends Component<ILoginForm<T>> {
     constructor(props: ILoginForm<T>) {

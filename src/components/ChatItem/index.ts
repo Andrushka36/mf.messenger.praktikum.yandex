@@ -3,9 +3,16 @@ import { templator } from '../../lib/Templator';
 import { template } from './template';
 import { IChatItem } from './interfaces';
 
-
 export class ChatItem extends Component<IChatItem> {
     render() {
-        return templator.compile(template, { ...this.props });
+        const {
+            open,
+            ...props
+        } = this.props;
+
+        return templator.compile(template, {
+            className: `chat-item${open ? ' chat-item_active' : ''}`,
+            ...props,
+        });
     }
 }
