@@ -80,22 +80,18 @@ npm run test
     <tbody>
         <tr>
             <td width="50%">
-                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/chat.jpg?raw=true" alt="Чат" />
-                Чат
+                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/chat.jpg?raw=true" alt="Скриншот чата" />
             </td>
             <td width="50%">
-                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/add-users.jpg?raw=true" alt="Добавление пользователей" />
-                Добавление пользователей
+                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/add-users.jpg?raw=true" alt="Скриншот добавления пользователей" />
             </td>
         </tr>
         <tr>
             <td width="50%">
-                <img src="https://github.com/Andrushka36/test1/blob/main/screenshots/registration.jpg" alt="Регистрация" />
-                Регистрация
+                <img src="https://github.com/Andrushka36/test1/blob/main/screenshots/registration.jpg" alt="Скриншот формы регистрации" />
             </td>
             <td width="50%">
-                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/profile.jpg?raw=true" alt="Профиль" />
-                Профиль
+                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/profile.jpg?raw=true" alt="Скришонт профиля" />
             </td>
         </tr>
     </tbody>
