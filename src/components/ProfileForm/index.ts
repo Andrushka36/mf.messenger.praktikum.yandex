@@ -2,7 +2,14 @@ import { Component } from '../../lib/Component';
 import { templator } from '../../lib/Templator';
 import { template } from './template';
 import { ProfileRow } from '../ProfileRow';
-import { ChangePasswordRequestType, UserAvatarType, UserFullType, UserRequestType } from '../../models/profile';
+import {
+    ChangePasswordRequestType,
+    UserAvatarType,
+    UserCommonType,
+    UserRequestType,
+    UserFullType,
+    UserType,
+} from '../../models/profile';
 import { isEmail } from '../../utils/validation/isEmail';
 import { isShortPassword } from '../../utils/validation/isShortPassword';
 import { isPhone } from '../../utils/validation/isPhone';
@@ -12,9 +19,10 @@ import { errorHandler } from '../../lib/ErrorHandler';
 import { userStore } from '../../stores';
 import { router } from '../../lib/Router';
 import { userDTO } from '../../api/userDTO';
+import { convertFromAPIResponse } from '../../utils/convertAPIResponse';
 
-export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
-    constructor(props: UserRequestType &  UserAvatarType) {
+export class ProfileForm extends Component<UserCommonType & UserAvatarType> {
+    constructor(props: UserCommonType & UserAvatarType) {
         super(props);
 
         if (this.element instanceof HTMLElement) {
@@ -27,9 +35,9 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
     }
 
     onSubmit = ({
-        first_name,
-        second_name,
-        display_name,
+        firstName,
+        secondName,
+        displayName,
         login,
         email,
         phone,
@@ -37,10 +45,10 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
         oldPassword,
         newPassword,
     }: UserFullType) => {
-        const profile = {
-            first_name,
-            second_name,
-            display_name,
+        const profile: UserRequestType = {
+            first_name: firstName,
+            second_name: secondName,
+            display_name: displayName,
             login,
             email,
             phone,
@@ -82,7 +90,8 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
                 const response = res.find(({ status }) => status === 'rejected');
                 const newData = (res.reverse().find((promiseFulfilledResult) => (promiseFulfilledResult as PromiseFulfilledResult<any>).value) as PromiseFulfilledResult<any>)?.value;
                 if (newData !== undefined) {
-                    userStore.setData({ ...JSON.parse(newData) });
+                    const newProfile = convertFromAPIResponse<UserType>(newData);
+                    userStore.setData({ ...newProfile });
                 }
                 if (response !== undefined && response.status !== undefined) {
                     errorHandler.handle((response as PromiseRejectedResult).reason.status);
@@ -104,7 +113,7 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
     )
 
     validator: Partial<{ [key in keyof UserFullType]: ValidationFunctionType<UserFullType> }> = {
-        ...this.checkRequiredFields('first_name', 'second_name', 'login', 'email', 'phone'),
+        ...this.checkRequiredFields('firstName', 'secondName', 'login', 'email', 'phone'),
         email: ({ email }) => {
             if (!isEmail(email)) {
                 return 'Укажите валидный email';
@@ -134,35 +143,35 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
 
     prerender() {
         const {
-            first_name = '',
-            second_name = '',
-            display_name,
+            firstName = '',
+            secondName = '',
+            displayName,
             login,
             email,
             phone,
         } = this.props;
 
-        const firstName = new ProfileRow({
-            name: 'first_name',
+        const firstNameBlock = new ProfileRow({
+            name: 'firstName',
             title: 'Имя',
             type: 'text',
-            value: first_name,
+            value: firstName,
             writable: true,
         });
 
-        const secondName = new ProfileRow({
-            name: 'second_name',
+        const secondNameBlock = new ProfileRow({
+            name: 'secondName',
             title: 'Фамилия',
             type: 'text',
-            value: second_name,
+            value: secondName,
             writable: true,
         });
 
-        const displayName = new ProfileRow({
-            name: 'display_name',
+        const displayNameBlock = new ProfileRow({
+            name: 'displayName',
             title: 'Отображаемое имя',
             type: 'text',
-            value: display_name || `${first_name} ${second_name}`,
+            value: displayName || `${firstName} ${secondName}`,
             writable: true,
         });
 
@@ -190,7 +199,7 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
             writable: true,
         });
 
-        const oldPassword = new ProfileRow({
+        const oldPasswordBlock = new ProfileRow({
             name: 'oldPassword',
             title: 'Текущий пароль',
             type: 'password',
@@ -198,7 +207,7 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
             writable: true,
         });
 
-        const newPassword = new ProfileRow({
+        const newPasswordBlock = new ProfileRow({
             name: 'newPassword',
             title: 'Новый пароль',
             type: 'password',
@@ -206,7 +215,7 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
             writable: true,
         });
 
-        const repeatNewPassword = new ProfileRow({
+        const repeatNewPasswordBlock = new ProfileRow({
             name: 'repeatNewPassword',
             title: 'Новый пароль (еще раз)',
             type: 'password',
@@ -214,7 +223,7 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
             writable: true,
         });
 
-        const avatar = new ProfileRow({
+        const avatarBlock = new ProfileRow({
             name: 'avatar',
             title: 'Загрузить аватар',
             type: 'file',
@@ -223,16 +232,16 @@ export class ProfileForm extends Component<UserRequestType &  UserAvatarType> {
         });
 
         this.content = [
-            firstName,
-            secondName,
-            displayName,
+            firstNameBlock,
+            secondNameBlock,
+            displayNameBlock,
             loginBlock,
             emailBlock,
             phoneBlock,
-            oldPassword,
-            newPassword,
-            repeatNewPassword,
-            avatar,
+            oldPasswordBlock,
+            newPasswordBlock,
+            repeatNewPasswordBlock,
+            avatarBlock,
         ];
     }
 

@@ -33,40 +33,31 @@ class Templator {
         }
     }
 
-    private _setAttributes<T>(node: HTMLElement | SVGElement, attrs: RegExpMatchArray, ctx: TemplatorContextType) {
-        const regexp = /(?<prop>[a-zA-Z0-9-]+)(="(?<value>.*?)")?/;
-        attrs.forEach(attr => {
-            const { prop, value = '' } = attr.match(regexp)?.groups as { prop: string, value?: string };
-
-            let val: string | number | boolean | Function | undefined | T = value;
-            const match = value?.match(/{{ (\w+) }}/);
-            if (match !== null && match !== undefined && match[1] !== undefined) {
-                if (typeof ctx[match[1]] === 'function') {
-                    val = ctx[match[1]] as string | number | boolean | Function | undefined | T;
-                } else {
-                    const re = new RegExp(`{{ ${match[1]} }}`);
-                    val = val?.replace(re, ctx[match[1]] as string || '');
-                }
-            }
-
-            if (typeof val === 'function' && prop in this.EVENTS) {
-                node.addEventListener(
-                    this.EVENTS[prop],
-                    val as (this: Document, ev: DocumentEventMap['blur' | 'change' | 'click' | 'submit']) => any
-                );
-            } else if (prop === 'class' && val !== undefined && node instanceof HTMLElement) {
-                node.className = String(val);
-            } else if (value === undefined) {
-                node.setAttribute(prop, 'true');
-            } else {
-                node.setAttribute(prop, String(val));
-            }
-        });
+    private _setAttribute(element: HTMLElement, key: string, prop: string | Function) {
+        if (typeof prop === 'function' && key in this.EVENTS) {
+            element.addEventListener(this.EVENTS[key], prop as (this: Document, ev: DocumentEventMap['blur' | 'change' | 'click' | 'submit']) => any);
+        } else if (key === 'class') {
+            element.className = String(prop);
+        } else {
+            element.setAttribute(key, String(prop));
+        }
     }
 
-    private _createNode<T extends AllowedComponent>(element: TemplatorTreeType, ctx: TemplatorContextType): SVGElement | DocumentFragment | HTMLElement | Text {
+    private _setAttributes(element: HTMLElement | SVGElement, props: Record<string, string | Function>) {
+        Object
+            .entries(props)
+            .map(([key, prop]) => {
+                this._setAttribute(element as HTMLElement, key, prop);
+            });
+    }
+
+    private _isCondition(str: string) {
+        return str.indexOf('$if') === 0;
+    }
+
+    private _createNode(element: TemplatorTreeType, ctx: TemplatorContextType): SVGElement | DocumentFragment | HTMLElement | Text {
         if (typeof element === 'string') {
-            if (element.indexOf('$if') === 0) {
+            if (this._isCondition(element)) {
                 return this._if(element, ctx);
             }
 
@@ -107,66 +98,79 @@ class Templator {
             return document.createTextNode(newItem);
         }
 
-        const { children, fullTag, tag } = element;
+        const { children, props, tag } = element;
 
-        if (tag === '<>') {
-            const fragment = document.createDocumentFragment();
+        const node = !this.SVG_TAGS.includes(tag) ? document.createElement(tag) : document.createElementNS('http://www.w3.org/2000/svg', tag);
 
-            children.forEach(ch => {
-                fragment.appendChild(this._createNode(ch, ctx));
-            });
+        this._setAttributes(node, props);
 
-            return fragment;
-        }
-
-        const wrapper = !this.SVG_TAGS.includes(tag) ? document.createElement(tag) : document.createElementNS('http://www.w3.org/2000/svg', tag);
-
-        const attrs = fullTag.match(/([a-zA-Z0-9-]+)="(.*?)"/g);
-
-        if (attrs !== null) {
-            this._setAttributes<T>(wrapper, attrs, ctx);
-        }
-
-        children.forEach((child) => {
-            wrapper.appendChild(this._createNode(child, ctx));
+        children.forEach((child: TemplatorTreeType) => {
+            node.appendChild(this._createNode(child, ctx));
         });
 
-        return wrapper;
+        return node;
     }
 
-    private _createTree(elements: string[]): TemplatorTreeType {
+    private _getAttributeValue(val: string, ctx: TemplatorContextType): string | Function {
+        const match = val.match(/{{ (\w+) }}/);
+
+        if (match !== null && match !== undefined && match[1] !== undefined) {
+            if (typeof ctx[match[1]] === 'function') {
+                return ctx[match[1]] as string | Function;
+            } else {
+                const re = new RegExp(`{{ ${match[1]} }}`);
+                return val.replace(re, ctx[match[1]] as string || '');
+            }
+        }
+
+        return val;
+    }
+
+    private _parseAttributes(attrs: RegExpMatchArray, ctx: TemplatorContextType): Record<string, string | Function> {
+        const regexp = /(?<prop>[a-zA-Z0-9-]+)(="(?<value>.*?)")?/;
+
+        return attrs
+            .map(attr => {
+                const { prop, value = '' } = attr.match(regexp)?.groups as { prop: string, value?: string };
+
+                return [prop, this._getAttributeValue(value, ctx)];
+            })
+            .filter((attr) => attr[1] !== '')
+            .reduce((prev, [key, prop]) => ({ ...prev, [key as string]: prop }), {});
+    }
+
+    private _createTree(elements: string[], ctx: TemplatorContextType): TemplatorTreeType {
         const isTag = (str: string) => /<([a-zA-Z]+.*?)|(\/[a-zA-Z]+)>/ig.test(str);
-        const parseFullTag = (str: string) => str.replace(/(<)|(( .*?)?\/?>)/g, '');
+        const getTag = (str: string) => str.replace(/(<)|(( .*?)?\/?>)/g, '');
         const isSelfClosedTag = (str: string) => /<[a-zA-Z]+.*?\/>/ig.test(str);
 
         const firstElement = elements.shift() as string;
 
-        if (firstElement[0] === '$') {
-            return firstElement;
-        }
-
-        if (isTag(firstElement)) {
-            const tag = parseFullTag(firstElement);
+        if (!this._isCondition(firstElement) && isTag(firstElement)) {
+            const tag = getTag(firstElement);
             const children = [];
             const end = `</${tag}>`;
+            const attrs = firstElement.match(/([a-zA-Z0-9-]+)="(.*?)"/g);
+            let props: Record<string, string | Function> = {};
+
+            if (attrs !== null) {
+                props = this._parseAttributes(attrs, ctx);
+            }
 
             if (!isSelfClosedTag(firstElement)) {
                 while (elements.length !== 0 && elements[0] !== end) {
-                    children.push(this._createTree(elements));
+                    const tree = this._createTree(elements, ctx);
+                    if (Array.isArray(tree)) {
+                        children.push(...tree);
+                    }  else {
+                        children.push(tree);
+                    }
                 }
 
                 elements.shift();
             }
 
-            return { tag, fullTag: firstElement, children };
-        } else if (firstElement === '<>') {
-            const children = [];
-
-            while (elements[0] !== '</>') {
-                children.push(this._createTree(elements));
-            }
-
-            return { tag: firstElement, fullTag: firstElement, children };
+            return { tag, props, children: children.filter(child => child !== '') };
         } else {
             return firstElement;
         }
@@ -184,7 +188,7 @@ class Templator {
         const elements = this._parseTemplate(str);
 
         // преобразуем этот массив в дерево
-        const tree = this._createTree(elements);
+        const tree = this._createTree(elements, ctx);
 
         // выводим элементы дерева
         return this._createNode(tree, ctx);

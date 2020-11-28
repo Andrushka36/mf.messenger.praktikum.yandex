@@ -25,9 +25,9 @@ export const editProfile = new class EditProfilePage extends Component {
 
     componentDidMount() {
         const {
-            first_name = '',
-            second_name = '',
-            display_name,
+            firstName = '',
+            secondName = '',
+            displayName,
             avatar,
         } = userStore.getData();
 
@@ -36,7 +36,7 @@ export const editProfile = new class EditProfilePage extends Component {
             content: new ProfileForm({
                 ...userStore.getData(),
             }),
-            displayName: display_name || `${first_name} ${second_name}`,
+            displayName: displayName || `${firstName} ${secondName}`,
         });
         this.forceUpdate();
     }

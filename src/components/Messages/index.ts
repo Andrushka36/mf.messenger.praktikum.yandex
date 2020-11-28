@@ -37,7 +37,7 @@ export class Messages extends Component<IMessages> {
         messages
             .slice()
             .reverse()
-            .forEach(({ user_id, time, content }, index, arr) => {
+            .forEach(({ userId, time, content }, index, arr) => {
                 const currentDate = getDate(time);
                 const prevDate = getDate(arr[index - 1]?.time);
 
@@ -48,8 +48,8 @@ export class Messages extends Component<IMessages> {
                 const currentTime = getTime(time);
                 const prevTime = getTime(arr[index - 1]?.time);
 
-                const currentType = this.getType(id, user_id);
-                const prevType = this.getType(id, arr[index - 1]?.user_id);
+                const currentType = this.getType(id, userId);
+                const prevType = this.getType(id, arr[index - 1]?.userId);
 
                 if (currentType === prevType && currentDate === prevDate && currentTime === prevTime) {
                     (res[res.length - 1] as IMappedMessage).content.push(content);
@@ -58,7 +58,7 @@ export class Messages extends Component<IMessages> {
                         content: [content],
                         time: currentTime,
                         type: currentType,
-                        userId: user_id,
+                        userId,
                     };
                     if (currentType === MessageType.OUTGOING) {
                         res.push({ ...item, status: MessageStatus.READ });
@@ -138,8 +138,8 @@ export class Messages extends Component<IMessages> {
 
                 return users
                     .get(userId)
-                    .then(({ first_name, second_name, display_name }) => {
-                        const user = display_name || `${first_name} ${second_name}`;
+                    .then(({ firstName, secondName, displayName }) => {
+                        const user = displayName || `${firstName} ${secondName}`;
 
                         component.setProps({ user });
                     });

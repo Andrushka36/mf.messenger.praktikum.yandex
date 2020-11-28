@@ -6,11 +6,11 @@ export type ChatType = {
 }
 
 export type ChatHistoryItemType = {
-    chat_id: number;
+    chatId: number;
     content: string;
     id: number;
     time: string;
-    user_id: number;
+    userId: number;
 }
 
 export type ChatMessageType = {

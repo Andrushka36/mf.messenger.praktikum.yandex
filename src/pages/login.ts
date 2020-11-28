@@ -6,7 +6,6 @@ import { signInDTO } from '../api/signInDTO';
 import { errorHandler } from '../lib/ErrorHandler';
 import { router } from '../lib/Router';
 import { authorization } from '../lib/Authorization';
-import { Err } from '../components/Error';
 
 const loginElement = new LoginFormRow({
     label: 'Логин',
@@ -31,11 +30,17 @@ export const login = new LoginForm<SignInType>({
     linkHref: '/registration',
     linkLabel: 'Нет аккаунта?',
     onSubmit: (values) => {
-        signInDTO
+        return signInDTO
             .create(values)
             .then(() => authorization.check())
             .then(() => {
                 const { pathname } = window.location;
+                login.setProps({
+                    error: '',
+                });
+                if (login.element instanceof HTMLElement) {
+                    login.element.querySelector('form')?.reset();
+                }
                 if (pathname === '/login' || pathname === '/login/') {
                     router.go('/');
                 } else {
@@ -47,10 +52,9 @@ export const login = new LoginForm<SignInType>({
                     const { reason } = JSON.parse(response);
 
                     if (reason === 'Login or password is incorrect') {
-                        router.renderComponent(new Err({
-                            code: status,
-                            text: 'Логин или пароль введены неправильно',
-                        }));
+                        login.setProps({
+                            error: 'Логин или пароль введены неправильно',
+                        });
                     }
                     return;
                 }
@@ -68,7 +72,7 @@ export const login = new LoginForm<SignInType>({
             }
         },
         password: ({ password }) => {
-            if (isShortPassword(password)) {
+            if (password && isShortPassword(password)) {
                 return 'Минимальная длина пароля - 8 символов';
             }
         },

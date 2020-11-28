@@ -22,7 +22,7 @@ export class WebSocketService {
         this._ws.addEventListener('close', cb);
     }
 
-    public onmessage(cb: (data: any) => void) {
+    public onmessage<T>(cb: (data: T) => void) {
         this._ws.addEventListener('message', (e: MessageEvent) => {
             try {
                 cb(JSON.parse(e.data));

@@ -1,6 +1,6 @@
 import { LoginForm } from '../components/LoginForm';
 import { LoginFormRow } from '../components/LoginFormRow';
-import { SignUpFullType } from '../models/signUp';
+import { SignUpFullType, SignUpRequestType } from '../models/signUp';
 import { isShortPassword } from '../utils/validation/isShortPassword';
 import { isPhone } from '../utils/validation/isPhone';
 import { isEmail } from '../utils/validation/isEmail';
@@ -8,18 +8,18 @@ import { signUpDTO } from '../api/signUpDTO';
 import { errorHandler } from '../lib/ErrorHandler';
 import { authorization } from '../lib/Authorization';
 import { router } from '../lib/Router';
-import { Err } from '../components/Error';
+import { convertToAPIRequest } from '../utils/convertToAPIRequest';
 
 const firstName = new LoginFormRow({
     label: 'Имя',
-    name: 'first_name',
+    name: 'firstName',
     type: 'text',
     value: '',
 });
 
 const secondName = new LoginFormRow({
     label: 'Фамилия',
-    name: 'second_name',
+    name: 'secondName',
     type: 'text',
     value: '',
 });
@@ -75,10 +75,18 @@ export const registration = new LoginForm<SignUpFullType>({
     linkLabel: 'Войти',
     long: true,
     onSubmit: (values) => {
-        signUpDTO
-            .create(values)
+        const v = convertToAPIRequest<SignUpRequestType>(values);
+
+        return signUpDTO
+            .create(v)
             .then(() => authorization.check())
             .then(() => {
+                registration.setProps({
+                    error: '',
+                });
+                if (registration.element instanceof HTMLElement) {
+                    registration.element.querySelector('form')?.reset();
+                }
                 router.go('/');
             })
             .catch(({ status, response  }) => {
@@ -86,12 +94,9 @@ export const registration = new LoginForm<SignUpFullType>({
                     const { reason } = JSON.parse(response);
 
                     if (reason === 'Login already exists') {
-                        router.renderComponent(new Err({
-                            code: status,
-                            linkHref: '/registration',
-                            linkLabel: 'Назад к регистрации',
-                            text: 'Пользователь с таким логином уже существует',
-                        }));
+                        registration.setProps({
+                            error: 'Пользователь с таким логином уже существует',
+                        });
                     }
                     return;
                 }

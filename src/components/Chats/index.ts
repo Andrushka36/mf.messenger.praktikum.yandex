@@ -63,7 +63,7 @@ export class Chats extends Component<IChats> {
 
         return templator.compile(template, {
             ...this.props,
-            areChatsExist: this.chatItems?.length !== 0,
+            areChatsExist: this.chatItems?.length > 0,
             chatItems: this.chatItems,
             chatCreateModal: this.chatCreateModal,
             content: chatId ? new Chat() : new SelectChat(),
@@ -148,7 +148,6 @@ export class Chats extends Component<IChats> {
             });
     }
 
-    // TODO: Убрать после написания Virtual DOM
     componentDidUpdate() {
         const searchInput = document.querySelector<HTMLInputElement>('.js-chats-search-input');
 

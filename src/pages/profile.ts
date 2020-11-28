@@ -60,9 +60,9 @@ export const profile = new class ProfilePage extends Component {
         const isCurrentProfile = profileId === undefined;
 
         const {
-            first_name = '',
-            second_name = '',
-            display_name,
+            firstName = '',
+            secondName = '',
+            displayName,
             login,
             email,
             phone,
@@ -74,15 +74,15 @@ export const profile = new class ProfilePage extends Component {
                 content: [
                     new ProfileRow({
                         title: 'Имя',
-                        value: first_name,
+                        value: firstName,
                     }),
                     new ProfileRow({
                         title: 'Фамилия',
-                        value: second_name,
+                        value: secondName,
                     }),
                     new ProfileRow({
                         title: 'Отображаемое имя',
-                        value: display_name || `${first_name} ${second_name}`,
+                        value: displayName || `${firstName} ${secondName}`,
                     }),
                     new ProfileRow({
                         title: 'Логин',
@@ -107,7 +107,7 @@ export const profile = new class ProfilePage extends Component {
         this.ProfileComponent.setProps({
             avatarSrc: getAvatarPath(avatar as unknown as string),
             content,
-            displayName: display_name || `${first_name} ${second_name}`,
+            displayName: displayName || `${firstName} ${secondName}`,
         });
         this.forceUpdate();
     }

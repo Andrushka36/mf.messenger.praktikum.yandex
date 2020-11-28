@@ -82,7 +82,6 @@ export class MessageForm extends Component<IMessageForm> {
         });
     }
 
-    // TODO: Удалить после написания Virtual DOM
     componentDidUpdate() {
         if (this.element instanceof HTMLElement) {
             const input = this.element.querySelector<HTMLInputElement>('[name="message"]');

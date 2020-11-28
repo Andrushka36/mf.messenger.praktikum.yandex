@@ -3,7 +3,7 @@ export type AllowedComponent = { getContent: () => SVGElement | DocumentFragment
 export type AllowedComponentConstructor = AllowedComponent & FunctionConstructor;
 
 export type TemplatorTreeType =
-    | { children: TemplatorTreeType[], tag: string, fullTag: string }
+    | { children: TemplatorTreeType[], props: Record<string, string | Function>, tag: string }
     | string;
 
 export type TemplatorContextType = { [key: string]: string | number | boolean | Function | AllowedComponent | AllowedComponent[] | undefined | null };
