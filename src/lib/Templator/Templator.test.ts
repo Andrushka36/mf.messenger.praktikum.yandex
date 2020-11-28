@@ -49,18 +49,6 @@ describe('Templator', () => {
         expect((templator.compile(template) as HTMLElement).outerHTML).to.equal('<input type="text" value="36">');
     });
 
-    it('checking fragments', () => {
-        const template = `
-            <>
-                <div>11</div>
-                <div>22</div>
-            </>
-        `;
-
-        expect((templator.compile(template) as DocumentFragment).children[0].textContent).to.equal('11');
-        expect((templator.compile(template) as DocumentFragment).children[1].textContent).to.equal('22');
-    });
-
     it('checking function property', () => {
         const onClick = fake();
 

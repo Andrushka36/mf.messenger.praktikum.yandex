@@ -1,4 +1,4 @@
 import { DTOModel } from '../lib/DTOModel';
-import { SignUpType } from '../models/signUp';
+import { SignUpRequestType } from '../models/signUp';
 
-export const signUpDTO = new DTOModel<SignUpType>('/auth/signup');
+export const signUpDTO = new DTOModel<SignUpRequestType>('/auth/signup');

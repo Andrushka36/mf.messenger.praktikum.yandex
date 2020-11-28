@@ -10,6 +10,7 @@ import { chatsStore, userStore } from '../../stores';
 import { WebSocketService } from '../../lib/WebSocketService';
 import { ChatHistoryItemType, ChatMessageType } from '../../models/chats';
 import { isEqual } from '../../utils/isEqual';
+import { convertFromAPIResponse } from '../../utils/convertAPIResponse';
 import './styles.sass';
 
 export class Chat extends Component<{}> {
@@ -74,6 +75,50 @@ export class Chat extends Component<{}> {
         }
     }
 
+    onMessage(data: ChatMessageType | ChatHistoryItemType[], chatId: string) {
+        if (Array.isArray(data)) {
+            const convertedData = convertFromAPIResponse<ChatHistoryItemType[]>(data);
+            if (convertedData.length === 0) {
+                this.updateMessages([...this.messageList, ...convertedData]);
+            } else {
+                const lastCurrentMessage = this.messageList[this.messageList.length - 1];
+                const lastCurrentMessageTime = lastCurrentMessage && new Date(lastCurrentMessage.time);
+                const firstNewMessage = convertedData[0];
+                const firstNewMessageTime = firstNewMessage && new Date(firstNewMessage.time);
+
+                if (lastCurrentMessageTime === undefined || firstNewMessageTime?.valueOf() < lastCurrentMessageTime.valueOf()) {
+                    const shouldScrollToLast = this.messageList.length === 0;
+
+                    this.updateMessages([...this.messageList, ...convertedData], shouldScrollToLast);
+                }
+            }
+        } else {
+            const {
+                content,
+                id,
+                time,
+                type,
+                userId,
+            } = data;
+
+            // "Почему тут есть проверка на typa, а массив сверху не проверяется?"
+            // а прикол в том что по сокетам в качестве ответов прилетают данные в разных форматах
+            // если я запрашиваю список сообщений, то мне прилетает просто массив
+            // если я отправляю сообщение, то ответ приходит в виде { type: "message", <свойства сообщения> }
+            // если бы ответ был в едином формате, я бы, конечно, сделал какой-нибудь метод в WebSocketService
+            // который принимал бы тип сообщения и коллбек
+            // и соответственно в зависимости от типа полученного сообщения вызывался бы определенный коллбек
+            // но поскольку ответы такие кривые прилетают, то приходится такое не очень красивое решение писать
+            // в принципе, наверное, стоит об этом в обратной связи по итогам 1ого модуля написать?
+
+            if (type === 'message') {
+                this.updateMessages([{ content, id, time, chatId: Number(chatId), userId }, ...this.messageList], true);
+
+                this.updateNewMessageCount(Number(chatId));
+            }
+        }
+    }
+
     createSocketConnection(token: string, userId: number, chatId: string) {
         this.socket = new WebSocketService(`/ws/chats/${userId}/${chatId}/${token}`);
 
@@ -95,34 +140,8 @@ export class Chat extends Component<{}> {
             this.createSocketConnection(token, userId, chatId);
         });
 
-        this.socket.onmessage((data) => {
-            if (Array.isArray(data)) {
-                if (data.length === 0) {
-                    this.updateMessages([...this.messageList, ...data]);
-                } else {
-                    const lastCurrentMessage = this.messageList[this.messageList.length - 1];
-                    const lastCurrentMessageTime = lastCurrentMessage && new Date(lastCurrentMessage.time);
-                    const firstNewMessage = data[0];
-                    const firstNewMessageTime = firstNewMessage && new Date(firstNewMessage.time);
-                    if (lastCurrentMessageTime === undefined || firstNewMessageTime?.valueOf() < lastCurrentMessageTime.valueOf()) {
-                        this.updateMessages([...this.messageList, ...data], this.messageList.length === 0);
-                    }
-                }
-            } else {
-                const {
-                    content,
-                    id,
-                    time,
-                    type,
-                    userId,
-                } = data as ChatMessageType;
-
-                if (type === 'message') {
-                    this.updateMessages([{ content, id, time, chat_id: Number(chatId), user_id: userId }, ...this.messageList], true);
-
-                    this.updateNewMessageCount(Number(chatId));
-                }
-            }
+        this.socket.onmessage<ChatMessageType | ChatHistoryItemType[]>((data) => {
+            this.onMessage(data, chatId);
         });
     }
 

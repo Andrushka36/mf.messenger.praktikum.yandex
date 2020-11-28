@@ -15,11 +15,12 @@ import { router } from '../../lib/Router';
 import { errorHandler } from '../../lib/ErrorHandler';
 import { ChatModalContent } from '../ChatModalContent';
 import { userDTO } from '../../api/userDTO';
-import { ChatUserResponseType, UserResponseType } from '../../models/profile';
+import { ChatUserType, UserType } from '../../models/profile';
 import { ChatAddUsersItem } from '../ChatAddUsersItem';
 import { getAvatarPath } from '../../utils/getAvatarPath';
 import { chatsStore } from '../../stores';
 import { ImageIcon } from '../../assets/ImageIcon';
+import { convertFromAPIResponse } from '../../utils/convertAPIResponse';
 
 export class ChatHeader extends Component<{}> {
     actionsButton!: ChatActionsButton;
@@ -129,22 +130,21 @@ export class ChatHeader extends Component<{}> {
                         .create({
                             login: value,
                         })
-                        .then((res: any) => {
-                            const users = JSON.parse(res) as UserResponseType[];
-
+                        .then(res => convertFromAPIResponse<UserType[]>(res))
+                        .then((users: UserType[]) => {
                             chatAddUsers.setProps({
                                 users: users.map(({
-                                    display_name,
-                                    first_name,
+                                    displayName,
+                                    firstName,
                                     id,
                                     login,
-                                    second_name,
+                                    secondName,
                                 }) => new ChatAddUsersItem({
-                                    display_name,
-                                    first_name,
+                                    displayName,
+                                    firstName,
                                     id,
                                     login,
-                                    second_name,
+                                    secondName,
                                 })),
                                 value,
                             });
@@ -170,7 +170,7 @@ export class ChatHeader extends Component<{}> {
                     .get('users')
                     .update({
                         users,
-                        chatId: this.chatId,
+                        chatId: Number(this.chatId),
                     })
                     .then(() => {
                         chatAddUsers.setProps({ ...initialChatAddUsersProps });
@@ -201,7 +201,7 @@ export class ChatHeader extends Component<{}> {
                     .get('users')
                     .delete({
                         users,
-                        chatId: this.chatId,
+                        chatId: Number(this.chatId),
                     })
                     .then(() => {
                         this.updateUsers();
@@ -230,22 +230,21 @@ export class ChatHeader extends Component<{}> {
         chatsDTO
             .get(`${this.chatId}/users`)
             .find()
-            .then((res: any) => {
-                const users = JSON.parse(res) as ChatUserResponseType[];
-
+            .then(res => convertFromAPIResponse<ChatUserType[]>(res))
+            .then((users: ChatUserType[]) => {
                 this.chatDeleteUsers.setProps({
                     users: users.map(({
-                        display_name,
-                        first_name,
+                        displayName,
+                        firstName,
                         id,
                         login,
-                        second_name,
+                        secondName,
                     }) => new ChatAddUsersItem({
-                        display_name,
-                        first_name,
+                        displayName,
+                        firstName,
                         id,
                         login,
-                        second_name,
+                        secondName,
                     })),
                 });
             })

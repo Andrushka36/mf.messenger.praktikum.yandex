@@ -2,12 +2,12 @@ export interface IChatAddUsersItem {
     /**
      * Отображаемое имя пользователя
      */
-    display_name: string | null;
+    displayName: string | null;
 
     /**
      * Имя пользователя
      */
-    first_name: string;
+    firstName: string;
 
     /**
      * Идентификатор пользователя
@@ -22,5 +22,5 @@ export interface IChatAddUsersItem {
     /**
      * Фамилия пользователя
      */
-    second_name: string;
+    secondName: string;
 }

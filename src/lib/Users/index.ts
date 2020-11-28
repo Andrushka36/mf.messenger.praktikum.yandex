@@ -1,19 +1,20 @@
-import { UserResponseType } from '../../models/profile';
+import { UserType } from '../../models/profile';
 import { userDTO } from '../../api/userDTO';
+import { convertFromAPIResponse } from '../../utils/convertAPIResponse';
 
 export class Users {
-    private _promises: Record<number, Promise<UserResponseType>> = {};
+    private _promises: Record<number, Promise<UserType>> = {};
 
     private _fetchUser(id: number) {
         return userDTO
             .get(id)
             .find()
             .then((res: any) => {
-                return JSON.parse(res) as UserResponseType;
+                return convertFromAPIResponse<UserType>(res);
             });
     }
 
-    get(id: number): Promise<UserResponseType> {
+    get(id: number): Promise<UserType> {
         if (id in this._promises) {
             return this._promises[id];
         }

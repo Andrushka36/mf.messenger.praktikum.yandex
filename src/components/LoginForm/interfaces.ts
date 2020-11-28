@@ -28,6 +28,11 @@ export interface ILoginForm<T> {
     linkLabel: string;
 
     /**
+     * Ошибка формы
+     */
+    error?: string;
+
+    /**
      * Определяет увеличенную высоту блока формы
      */
     long?: boolean;

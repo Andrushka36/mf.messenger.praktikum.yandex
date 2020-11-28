@@ -3,6 +3,7 @@ export const template = `
         <form class="login-form {{ className }}">
             <h1 class="login-form__title">{{ pageTitle }}</h1>
             {{ content }}
+            <div class="form-response-error">{{ error }}</div>
             <button class="login-form__submit" type="submit">{{ buttonLabel }}</button>
             <a href="{{ linkHref }}" class="login-form__link">{{ linkLabel }}</a>
         </form>

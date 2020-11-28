@@ -115,22 +115,20 @@ export class Form<T> {
     }
 
     public submit(onSubmit: (values: T) => void, exclude?: keyof T | (keyof T)[]) {
-        if (exclude !== undefined) {
-            if (typeof exclude === 'string') {
-                this.formData.delete(exclude);
-            } else if (Array.isArray(exclude)) {
-                exclude.forEach((item) => {
-                    this.formData.delete(item as string);
-                });
-            }
-        }
+        const excludeArr: (keyof T)[] = exclude === undefined ? [] : (typeof exclude === 'string' ? [exclude as keyof T] : exclude as (keyof T)[]);
 
         const data: Partial<{ [key in keyof T]: any }> = {};
 
         this.formData.forEach((value, key) => {
-            data[key as keyof T] = value;
+            if (!excludeArr.includes(key as keyof T)) {
+                data[key as keyof T] = value;
+            }
         });
 
         onSubmit(data as T);
+    }
+
+    public isIntoDOM() {
+        return Array.from(document.querySelectorAll('form')).some(form => form === this.form);
     }
 }

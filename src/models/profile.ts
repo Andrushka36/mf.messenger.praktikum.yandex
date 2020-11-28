@@ -7,6 +7,15 @@ export type UserRequestType = {
     phone: string;
 }
 
+export type UserCommonType = {
+    firstName: string,
+    secondName: string;
+    displayName: string | null;
+    login: string;
+    email: string;
+    phone: string
+};
+
 export type UserAvatarType = {
     avatar: string | null;
 }
@@ -16,8 +25,13 @@ export type ChangePasswordRequestType = {
     newPassword: string;
 }
 
-export type UserResponseType = UserRequestType & UserAvatarType & { id: number ;}
+enum UserRole {
+    ADMIN = 'admin',
+    REGULAR = 'regular',
+}
 
-export type ChatUserResponseType = UserResponseType & { role: 'admin' | 'regular' };
+export type UserType = UserCommonType & UserAvatarType & { id: number };
 
-export type UserFullType = UserRequestType & UserAvatarType & ChangePasswordRequestType & { repeatNewPassword: string };
+export type ChatUserType = UserType & { role: UserRole }
+
+export type UserFullType = UserCommonType & UserAvatarType & ChangePasswordRequestType & { repeatNewPassword: string };

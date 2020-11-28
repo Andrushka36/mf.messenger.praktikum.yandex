@@ -6,29 +6,13 @@ import { ILoginForm } from './interfaces';
 import './styles.sass';
 
 export class LoginForm<T> extends Component<ILoginForm<T>> {
-    constructor(props: ILoginForm<T>) {
-        super(props);
-
-        if (this.element instanceof HTMLElement) {
-            const {
-                excludeOnSubmit: exclude,
-                onSubmit,
-                validator,
-            } = this.props;
-
-            new Form<T>({
-                exclude,
-                onSubmit,
-                validator,
-                wrapper: this.element,
-            });
-        }
-    }
+    form: Form<T> | null = null;
 
     render() {
         const {
             buttonLabel,
             content,
+            error,
             linkHref,
             linkLabel,
             long,
@@ -39,10 +23,38 @@ export class LoginForm<T> extends Component<ILoginForm<T>> {
             buttonLabel,
             className: long ? 'login-form_long' : '',
             content,
+            error,
             linkHref,
             linkLabel,
             long,
             pageTitle,
         });
+    }
+
+    createForm() {
+        if (this.element instanceof HTMLElement) {
+            if (this.form === null || !this.form?.isIntoDOM()) {
+                const {
+                    excludeOnSubmit: exclude,
+                    onSubmit,
+                    validator,
+                } = this.props;
+
+                this.form = new Form<T>({
+                    exclude,
+                    onSubmit,
+                    validator,
+                    wrapper: this.element,
+                });
+            }
+        }
+    }
+
+    componentDidMount() {
+        this.createForm();
+    }
+
+    componentDidUpdate() {
+        this.createForm();
     }
 }

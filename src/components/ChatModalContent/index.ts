@@ -13,7 +13,6 @@ export class ChatModalContent extends Component<IChatModalContent> {
         return templator.compile(template, { ...this.props });
     }
 
-    // TODO: Убрать после написания Virtual DOM
     componentDidUpdate() {
         const loginInput = (this.element as HTMLElement).querySelector('.js-modal-chat-input') as HTMLInputElement | null;
 

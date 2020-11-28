@@ -1,5 +1,7 @@
 import { authUserDTO } from '../../api/authUserDTO';
 import { userStore } from '../../stores';
+import { convertFromAPIResponse } from '../../utils/convertAPIResponse';
+import { UserType } from '../../models/profile';
 
 export class Authorization {
     static __instance: Authorization;
@@ -37,7 +39,8 @@ export class Authorization {
 export const authorization = new Authorization(
     () => authUserDTO
         .find()
-        .then((data: any) => {
-            userStore.setData({ ...JSON.parse(data) });
+        .then(data => convertFromAPIResponse<UserType>(data))
+        .then(users => {
+            userStore.setData({ ...users });
         })
 );
