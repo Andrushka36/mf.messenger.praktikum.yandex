@@ -88,7 +88,7 @@ npm run test
         </tr>
         <tr>
             <td width="50%">
-                <img src="https://github.com/Andrushka36/test1/blob/main/screenshots/registration.jpg" alt="Скриншот формы регистрации" />
+                <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/registration.jpg?raw=true" alt="Скриншот формы регистрации" />
             </td>
             <td width="50%">
                 <img src="https://github.com/Andrushka36/mf.messenger.praktikum.yandex/blob/master/screenshots/profile.jpg?raw=true" alt="Скришонт профиля" />
